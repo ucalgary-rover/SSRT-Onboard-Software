@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/">
+    <file alias="/qt/qml/DummyCameraApp">/home/tymarc/Software/2024-2025-Software/base-development/DummyCameraApp/build/Desktop-Debug/DummyCameraApp</file>
+
+  </qresource>
+</RCC>

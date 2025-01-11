@@ -1,0 +1,80 @@
+# ninja log v6
+4	67	1731129268390488756	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/CMakeFiles/appDummyCameraApp_qmllint	4d60add61d3eb478
+103	106	1730949442239358519	meta_types/qt6appdummycameraapp_debug_metatypes.json	f2032654a20d5cc9
+107	1643	1731129387216151215	CMakeFiles/appDummyCameraApp.dir/build/Desktop_Qt_6_8_0-Debug/.rcc/qmlcache/appDummyCameraApp_Main_qml.cpp.o	cda0eddc63caa57
+97	99	1730949526383663746	meta_types/appDummyCameraApp_json_file_list.txt	5ec0ae7560704600
+4	67	1731129268390488756	CMakeFiles/appDummyCameraApp_qmllint	4d60add61d3eb478
+97	99	1730949526383663746	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/meta_types/appDummyCameraApp_json_file_list.txt	5ec0ae7560704600
+4	9	1731129387118151543	DummyCameraApp/Main.qml	539d9b9389c697e6
+181	219	1730949526467663998	CMakeFiles/appDummyCameraApp.dir/build/Desktop_Qt_6_8_0-Debug/.qt/rcc/qrc_qmake_DummyCameraApp.cpp.o	79cc88da944d250b
+107	138	1731129387216151215	CMakeFiles/appDummyCameraApp.dir/build/Desktop_Qt_6_8_0-Debug/.qt/rcc/qrc_appDummyCameraApp_raw_qml_0.cpp.o	5ca321604aa7dcbe
+62	107	1731129387211151232	.rcc/qmlcache/appDummyCameraApp_Main_qml.cpp	33ebe3775477fc1c
+103	106	1730949442239358519	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/meta_types/qt6appdummycameraapp_debug_metatypes.json	f2032654a20d5cc9
+180	216	1730949526466663995	CMakeFiles/appDummyCameraApp.dir/appDummyCameraApp_autogen/mocs_compilation.cpp.o	a41de38df464561f
+61	96	1730949526347663638	appDummyCameraApp_autogen/mocs_compilation.cpp	4c8c8cfd582f8562
+100	108	1730949442238358515	.rcc/qmlcache/appDummyCameraApp_qmlcache_loader.cpp	acc859787a9c5314
+99	132	1730949526409663824	appdummycameraapp_qmltyperegistrations.cpp	6b993d352e07a6c6
+103	106	1730949442239358519	meta_types/qt6appdummycameraapp_debug_metatypes.json.gen	f2032654a20d5cc9
+62	67	1731129387175151352	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/.qt/rcc/qrc_appDummyCameraApp_raw_qml_0.cpp	1b051816baf3b4da
+100	105	1730949442237358511	.qt/rcc/qrc_qmake_DummyCameraApp.cpp	38cd434ba0a3e2ab
+62	107	1731129387211151232	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/.rcc/qmlcache/appDummyCameraApp_Main_qml.cpp	33ebe3775477fc1c
+181	1882	1730949526467663998	CMakeFiles/appDummyCameraApp.dir/main.cpp.o	bee78302ff49e27f
+99	132	1730949526409663824	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/appdummycameraapp_qmltyperegistrations.cpp	6b993d352e07a6c6
+5	62	1731129387169151373	.qt/qml_imports/appDummyCameraApp_build.cmake	666f1827c87525f6
+181	2110	1730949526467663998	CMakeFiles/appDummyCameraApp.dir/build/Desktop_Qt_6_8_0-Debug/.rcc/qmlcache/appDummyCameraApp_qmlcache_loader.cpp.o	932058f820e42561
+62	107	1731129387211151232	.rcc/qmlcache/appDummyCameraApp_Main_qml.cpp.aotstats	33ebe3775477fc1c
+181	1784	1730949526467663998	CMakeFiles/appDummyCameraApp.dir/appdummycameraapp_qmltyperegistrations.cpp.o	e84f704a961b7548
+62	107	1731129387211151232	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/.rcc/qmlcache/appDummyCameraApp_Main_qml.cpp.aotstats	33ebe3775477fc1c
+61	96	1730949526347663638	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/appDummyCameraApp_autogen/timestamp	4c8c8cfd582f8562
+99	132	1730949526409663824	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/DummyCameraApp/appDummyCameraApp.qmltypes	6b993d352e07a6c6
+103	106	1730949442239358519	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/meta_types/qt6appdummycameraapp_debug_metatypes.json.gen	f2032654a20d5cc9
+61	96	1730949526347663638	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/appDummyCameraApp_autogen/mocs_compilation.cpp	4c8c8cfd582f8562
+61	96	1730949526347663638	appDummyCameraApp_autogen/timestamp	4c8c8cfd582f8562
+99	132	1730949526409663824	DummyCameraApp/appDummyCameraApp.qmltypes	6b993d352e07a6c6
+100	105	1730949442237358511	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/.qt/rcc/qrc_qmake_DummyCameraApp.cpp	38cd434ba0a3e2ab
+5	62	1731129387169151373	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/.qt/qml_imports/appDummyCameraApp_build.cmake	666f1827c87525f6
+4	9	1731129387118151543	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/DummyCameraApp/Main.qml	539d9b9389c697e6
+97	99	1730949526383663746	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/meta_types/appDummyCameraApp_json_file_list.txt.timestamp	5ec0ae7560704600
+62	67	1731129387175151352	.qt/rcc/qrc_appDummyCameraApp_raw_qml_0.cpp	1b051816baf3b4da
+100	108	1730949442238358515	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/.rcc/qmlcache/appDummyCameraApp_qmlcache_loader.cpp	acc859787a9c5314
+1643	1972	1731129388752146072	appDummyCameraApp	5bdbfa3843e25141
+97	99	1730949526383663746	meta_types/appDummyCameraApp_json_file_list.txt.timestamp	5ec0ae7560704600
+7	13	1731175831997223874	DummyCameraApp/Main.qml	539d9b9389c697e6
+7	13	1731175831997223874	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/DummyCameraApp/Main.qml	539d9b9389c697e6
+8	91	1731175832072223397	.qt/qml_imports/appDummyCameraApp_build.cmake	666f1827c87525f6
+8	91	1731175832072223397	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/.qt/qml_imports/appDummyCameraApp_build.cmake	666f1827c87525f6
+92	102	1731175832085223314	.qt/rcc/qrc_appDummyCameraApp_raw_qml_0.cpp	1b051816baf3b4da
+92	102	1731175832085223314	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/.qt/rcc/qrc_appDummyCameraApp_raw_qml_0.cpp	1b051816baf3b4da
+91	180	1731175832152222888	.rcc/qmlcache/appDummyCameraApp_Main_qml.cpp	33ebe3775477fc1c
+91	180	1731175832152222888	.rcc/qmlcache/appDummyCameraApp_Main_qml.cpp.aotstats	33ebe3775477fc1c
+91	180	1731175832152222888	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/.rcc/qmlcache/appDummyCameraApp_Main_qml.cpp	33ebe3775477fc1c
+91	180	1731175832152222888	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/.rcc/qmlcache/appDummyCameraApp_Main_qml.cpp.aotstats	33ebe3775477fc1c
+181	290	1731175832166222798	CMakeFiles/appDummyCameraApp.dir/build/Desktop_Qt_6_8_0-Debug/.qt/rcc/qrc_appDummyCameraApp_raw_qml_0.cpp.o	5ca321604aa7dcbe
+180	2742	1731175832165222805	CMakeFiles/appDummyCameraApp.dir/build/Desktop_Qt_6_8_0-Debug/.rcc/qmlcache/appDummyCameraApp_Main_qml.cpp.o	cda0eddc63caa57
+2742	3708	1731175834727206442	appDummyCameraApp	5bdbfa3843e25141
+4	9	1731175858967044734	DummyCameraApp/Main.qml	539d9b9389c697e6
+4	9	1731175858967044734	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/DummyCameraApp/Main.qml	539d9b9389c697e6
+5	76	1731175859032044284	.qt/qml_imports/appDummyCameraApp_build.cmake	666f1827c87525f6
+5	76	1731175859032044284	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/.qt/qml_imports/appDummyCameraApp_build.cmake	666f1827c87525f6
+77	86	1731175859043044208	.qt/rcc/qrc_appDummyCameraApp_raw_qml_0.cpp	1b051816baf3b4da
+77	86	1731175859043044208	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/.qt/rcc/qrc_appDummyCameraApp_raw_qml_0.cpp	1b051816baf3b4da
+76	146	1731175859094043855	.rcc/qmlcache/appDummyCameraApp_Main_qml.cpp	33ebe3775477fc1c
+76	146	1731175859094043855	.rcc/qmlcache/appDummyCameraApp_Main_qml.cpp.aotstats	33ebe3775477fc1c
+76	146	1731175859094043855	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/.rcc/qmlcache/appDummyCameraApp_Main_qml.cpp	33ebe3775477fc1c
+76	146	1731175859094043855	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/.rcc/qmlcache/appDummyCameraApp_Main_qml.cpp.aotstats	33ebe3775477fc1c
+146	203	1731175859105043779	CMakeFiles/appDummyCameraApp.dir/build/Desktop_Qt_6_8_0-Debug/.qt/rcc/qrc_appDummyCameraApp_raw_qml_0.cpp.o	5ca321604aa7dcbe
+146	2370	1731175859105043779	CMakeFiles/appDummyCameraApp.dir/build/Desktop_Qt_6_8_0-Debug/.rcc/qmlcache/appDummyCameraApp_Main_qml.cpp.o	cda0eddc63caa57
+2370	3166	1731175861329028356	appDummyCameraApp	5bdbfa3843e25141
+27	31	1731186090547009480	DummyCameraApp/Main.qml	539d9b9389c697e6
+27	31	1731186090547009480	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/DummyCameraApp/Main.qml	539d9b9389c697e6
+28	137	1731186090653009889	.qt/qml_imports/appDummyCameraApp_build.cmake	666f1827c87525f6
+28	137	1731186090653009889	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/.qt/qml_imports/appDummyCameraApp_build.cmake	666f1827c87525f6
+138	145	1731186090661009920	.qt/rcc/qrc_appDummyCameraApp_raw_qml_0.cpp	1b051816baf3b4da
+138	145	1731186090661009920	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/.qt/rcc/qrc_appDummyCameraApp_raw_qml_0.cpp	1b051816baf3b4da
+137	209	1731186090713010120	.rcc/qmlcache/appDummyCameraApp_Main_qml.cpp	33ebe3775477fc1c
+137	209	1731186090713010120	.rcc/qmlcache/appDummyCameraApp_Main_qml.cpp.aotstats	33ebe3775477fc1c
+137	209	1731186090713010120	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/.rcc/qmlcache/appDummyCameraApp_Main_qml.cpp	33ebe3775477fc1c
+137	209	1731186090713010120	/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/build/Desktop_Qt_6_8_0-Debug/.rcc/qmlcache/appDummyCameraApp_Main_qml.cpp.aotstats	33ebe3775477fc1c
+209	275	1731186090726010170	CMakeFiles/appDummyCameraApp.dir/build/Desktop_Qt_6_8_0-Debug/.qt/rcc/qrc_appDummyCameraApp_raw_qml_0.cpp.o	5ca321604aa7dcbe
+209	1972	1731186090726010170	CMakeFiles/appDummyCameraApp.dir/build/Desktop_Qt_6_8_0-Debug/.rcc/qmlcache/appDummyCameraApp_Main_qml.cpp.o	cda0eddc63caa57
+1972	2517	1731186092489016967	appDummyCameraApp	5bdbfa3843e25141

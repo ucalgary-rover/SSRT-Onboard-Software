@@ -1,0 +1,14 @@
+-rootPath
+/home/tymarc/Software/2024-2025-Software/base-development/DummyCameraApp
+-cmake-output
+-output-file
+/home/tymarc/Software/2024-2025-Software/base-development/DummyCameraApp/build/Desktop-Debug/.qt/qml_imports/appDummyCameraApp_conf.cmake
+-importPath
+/home/tymarc/Software/2024-2025-Software/base-development/DummyCameraApp/build/Desktop-Debug/DummyCameraApp
+-importPath
+/home/tymarc/Software/2024-2025-Software/base-development/DummyCameraApp/build/Desktop-Debug
+-importPath
+/usr/lib/qt6/qml
+-qrcFiles
+/home/tymarc/Software/2024-2025-Software/base-development/DummyCameraApp/build/Desktop-Debug/.qt/rcc/qmake_DummyCameraApp.qrc
+/home/tymarc/Software/2024-2025-Software/base-development/DummyCameraApp/build/Desktop-Debug/.qt/rcc/appDummyCameraApp_raw_qml_0.qrc

@@ -1,0 +1,40 @@
+file(REMOVE_RECURSE
+  ".qt/rcc/qrc_appDummyCameraApp_raw_qml_0.cpp"
+  ".qt/rcc/qrc_qmake_DummyCameraApp.cpp"
+  ".rcc/qmlcache/appDummyCameraApp_Main_qml.cpp"
+  ".rcc/qmlcache/appDummyCameraApp_Main_qml.cpp.aotstats"
+  ".rcc/qmlcache/appDummyCameraApp_qmlcache_loader.cpp"
+  "CMakeFiles/appDummyCameraApp.dir/link.d"
+  "CMakeFiles/appDummyCameraApp_autogen.dir/AutogenUsed.txt"
+  "CMakeFiles/appDummyCameraApp_autogen.dir/ParseCache.txt"
+  "appDummyCameraApp_autogen"
+  "CMakeFiles/appDummyCameraApp.dir/appDummyCameraApp_autogen/mocs_compilation.cpp.o"
+  "CMakeFiles/appDummyCameraApp.dir/appDummyCameraApp_autogen/mocs_compilation.cpp.o.d"
+  "CMakeFiles/appDummyCameraApp.dir/appdummycameraapp_qmltyperegistrations.cpp.o"
+  "CMakeFiles/appDummyCameraApp.dir/appdummycameraapp_qmltyperegistrations.cpp.o.d"
+  "CMakeFiles/appDummyCameraApp.dir/build/Desktop-Debug/.qt/rcc/qrc_appDummyCameraApp_raw_qml_0.cpp.o"
+  "CMakeFiles/appDummyCameraApp.dir/build/Desktop-Debug/.qt/rcc/qrc_appDummyCameraApp_raw_qml_0.cpp.o.d"
+  "CMakeFiles/appDummyCameraApp.dir/build/Desktop-Debug/.qt/rcc/qrc_qmake_DummyCameraApp.cpp.o"
+  "CMakeFiles/appDummyCameraApp.dir/build/Desktop-Debug/.qt/rcc/qrc_qmake_DummyCameraApp.cpp.o.d"
+  "CMakeFiles/appDummyCameraApp.dir/build/Desktop-Debug/.rcc/qmlcache/appDummyCameraApp_Main_qml.cpp.o"
+  "CMakeFiles/appDummyCameraApp.dir/build/Desktop-Debug/.rcc/qmlcache/appDummyCameraApp_Main_qml.cpp.o.d"
+  "CMakeFiles/appDummyCameraApp.dir/build/Desktop-Debug/.rcc/qmlcache/appDummyCameraApp_qmlcache_loader.cpp.o"
+  "CMakeFiles/appDummyCameraApp.dir/build/Desktop-Debug/.rcc/qmlcache/appDummyCameraApp_qmlcache_loader.cpp.o.d"
+  "CMakeFiles/appDummyCameraApp.dir/main.cpp.o"
+  "CMakeFiles/appDummyCameraApp.dir/main.cpp.o.d"
+  "DummyCameraApp/appDummyCameraApp.qmltypes"
+  "appDummyCameraApp"
+  "appDummyCameraApp.pdb"
+  "appDummyCameraApp_autogen/mocs_compilation.cpp"
+  "appDummyCameraApp_autogen/timestamp"
+  "appdummycameraapp_qmltyperegistrations.cpp"
+  "meta_types/appDummyCameraApp_json_file_list.txt"
+  "meta_types/appDummyCameraApp_json_file_list.txt.timestamp"
+  "meta_types/qt6appdummycameraapp_debug_metatypes.json"
+  "meta_types/qt6appdummycameraapp_debug_metatypes.json.gen"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/appDummyCameraApp.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()
