@@ -1,0 +1,6 @@
+Hello my name is Rodrigo and I am wondering if I can send a file
+across the network,
+
+Cheers, from the otherside
+
+Rod
