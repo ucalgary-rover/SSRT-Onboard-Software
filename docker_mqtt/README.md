@@ -44,12 +44,26 @@ You need two terminals to run this.
 
 Run this first in a terminal.
 ```bash
-mosquitto_sub -h localhost -t "test/topic"
+mosquitto_sub -h localhost -p 1883 -t "test/topic"
 ```
 
 Then this.
 ```bash
-mosquitto_pub -h localhost -t "test/topic" -m "Hello, MQTT"
+mosquitto_pub -h localhost -p 1883 -t "test/topic" -m "Hello, MQTT"
 ```
 
 You should now see the response in subscriber terminal.
+
+### Testing with example-sub.py
+This example shows how you could construct a function that can read from the broker in python.
+
+First install paho-mqtt
+```bash
+pip install paho-mqtt
+```
+
+Run the py file with parameters
+```bash
+python3 example-sub.py -b 127.0.0.1 -p 1883 -t test/topic
+```
+
