@@ -1,4 +1,4 @@
-# Running the DummyCameraApp's server
+# Running the Camera server
 
 ### Note this README assumes you are using Ubuntu, as to mimic running this on the Rover's NUC
 
