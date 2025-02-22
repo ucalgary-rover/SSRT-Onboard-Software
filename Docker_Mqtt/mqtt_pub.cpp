@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <nlohmann/json.hpp>
 
 int main() {
     // Define the command
