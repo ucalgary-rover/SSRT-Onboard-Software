@@ -66,4 +66,58 @@ Run the py file with parameters
 ```bash
 python3 example-sub.py -b 127.0.0.1 -p 1883 -t test/topic
 ```
+# Setting Up and Running MQTT Publisher
+
+## 1. Install Essential Libraries
+```sh
+sudo apt update
+sudo apt install build-essential cmake libssl-dev
+```
+
+## 2. Clone and Build Paho C and C++ Libraries
+```sh
+git clone https://github.com/eclipse/paho.mqtt.c.git
+cd paho.mqtt.c
+cmake -Bbuild -H. -DPAHO_BUILD_STATIC=TRUE -DPAHO_WITH_SSL=TRUE
+sudo cmake --build build/ --target install
+cd ..
+
+git clone https://github.com/eclipse/paho.mqtt.cpp.git
+cd paho.mqtt.cpp
+cmake -Bbuild -H. -DPAHO_BUILD_STATIC=TRUE -DPAHO_WITH_SSL=TRUE
+sudo cmake --build build/ --target install
+```
+
+## 3. Install JSON Library
+*This step might not work in some cases*
+```sh
+sudo apt update
+sudo apt install nlohmann-json3-dev
+```
+
+## 4. Compile the Code
+```sh
+g++ test_pub.cpp -o test_pub -lpaho-mqttpp3 -lpaho-mqtt3as
+```
+
+## 5. Configure the Library (Important Step)
+```sh
+sudo ldconfig /usr/local/lib
+```
+
+## 6. Run the Python Subscriber
+```sh
+python3 example-sub.py -b localhost -p 1883 -t sensor/data
+```
+
+## 7. Run the MQTT Publisher
+```sh
+./test_pub
+```
+
+## Summary
+- Installed essential libraries, cloned Paho C and C++ repositories, compiled, and ran the updated code in `test_pub.cpp`.
+- **Step 5 (ldconfig) is very important**, as it ensures the Paho and JSON libraries are included without compilation errors.
+- Not sure if the Paho libraries need to be cloned for every setup.
+
 

@@ -1,0 +1,5 @@
+{
+    "host": "localhost",
+    "topic": "sensor/data",
+    "message": "Marc Ty is Linux Man"
+}
