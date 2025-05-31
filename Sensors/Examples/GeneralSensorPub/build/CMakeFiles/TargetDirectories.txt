@@ -1,0 +1,3 @@
+/home/marcty/MySoftware/GeneralSensorPub/build/CMakeFiles/main.dir
+/home/marcty/MySoftware/GeneralSensorPub/build/CMakeFiles/edit_cache.dir
+/home/marcty/MySoftware/GeneralSensorPub/build/CMakeFiles/rebuild_cache.dir
