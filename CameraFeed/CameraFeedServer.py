@@ -104,6 +104,7 @@ def camera_thread(camera_index, stop_event):
 
     while not stop_event.is_set():
         success, frame = cap.read()
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         if not success:
             print(f"Failed to read frame from camera at {device}")
             time.sleep(1)
