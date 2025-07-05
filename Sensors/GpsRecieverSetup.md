@@ -18,14 +18,32 @@ sudo apt install gpsd gpsd-clients
 ```
 
 ## Starting GPSD
+
+### Starting GPSD manually
 Enter device port used in place of [device]
 Run gpsd service
 ```bash
 gpsd /dev/[device] -n -N -D 3 /*
 ```
 
+### Starting on boot
+Ensure that gpsd is configured via /etc/default/gpsd. To do so:
+
+```bash
+sudo nano /etc/default/gpsd
+```
+And modify the existing parameters.
+
+GPSD can be configured to start on boot via systemctl service:
+
+```bash
+sudo systemctl restart gpsd
+sudo systemctl enable gpsd
+```
+
 ## Testing
-Run
+Open a command line application to test read from the GPS devices connected
+
 ```bash
 cgps 
 ```
