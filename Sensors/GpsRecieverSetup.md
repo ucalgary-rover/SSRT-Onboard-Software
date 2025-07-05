@@ -23,7 +23,7 @@ sudo apt install gpsd gpsd-clients
 Enter device port used in place of [device]
 Run gpsd service
 ```bash
-gpsd /dev/[device] -n -N -D 3 /*
+gpsd /dev/[device] -n -N -D 3
 ```
 
 ### Starting on boot
