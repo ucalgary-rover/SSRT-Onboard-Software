@@ -5,8 +5,8 @@
 #include <termios.h>
 #include <unistd.h>
 
-#define PORT "dev/ttyS2"  // replace with actual port
-#define BAUD_RATE B115200 // based on geiger counter specs
+#define PORT "/dev/ttyACM0" // replace with actual port
+#define BAUD_RATE B115200   // based on geiger counter specs
 
 int main()
 {
@@ -15,7 +15,7 @@ int main()
     int serialPort = open(PORT, O_RDWR | O_NOCTTY); // read/write and do not take control of terminal
     if (serialPort < 0)
     {
-        std::cout << "Failed to open serial port" << std::endl;
+        std::cout << "Failed to open serial port " << serialPort << std::endl;
         return 1;
     }
 
@@ -58,6 +58,7 @@ int main()
         int n = read(serialPort, &byte, 1);
         if (n > 0)
         {
+            // insert useful code to forward to base computer here
             printf("Received: 0x%02X\n", byte);
         }
         else if (n < 0)
