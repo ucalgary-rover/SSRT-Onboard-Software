@@ -1,7 +1,7 @@
 #include <windows.h>
 #include <iostream>
 
-#define PORT_NAME "\\\\.\\COM3" // Windows requires this format for COM10+; works for COM1-9 too
+#define PORT_NAME "\\\\.\\COM5" // Windows requires this format for COM10+; works for COM1-9 too
 #define BAUD_RATE CBR_115200
 
 int main()
@@ -65,5 +65,6 @@ int main()
     }
 
     CloseHandle(hSerial);
+    std::cout << "Exiting" << std::endl;
     return 0;
 }

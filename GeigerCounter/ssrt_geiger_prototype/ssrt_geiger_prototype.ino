@@ -1,4 +1,7 @@
+#include <SoftwareSerial.h> 
+
 int randomNumber;
+SoftwareSerial geigerOutSerial(2, 3);
 
 void setup() {
   // initialize pin to be used for data transfer
@@ -6,8 +9,8 @@ void setup() {
 
   // used for initial debugging
   Serial.begin(115200);
+  geigerOutSerial.begin(115200);
   randomSeed(analogRead(0));  // use analog noise to intialize random generator
-
 }
 
 void loop() {
@@ -16,5 +19,6 @@ void loop() {
 
   // Serial1.println(randomNumber);
   Serial.println(randomNumber, HEX);  // REMOVE WHEN DONE DEBUGGING
+  geigerOutSerial.println(randomNumber, HEX);
   delay(100);
 }
