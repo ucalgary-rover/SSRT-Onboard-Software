@@ -8,6 +8,14 @@
 #define PORT "/dev/ttyACM0" // replace with actual port
 #define BAUD_RATE B115200   // based on geiger counter specs
 
+struct SensorData {
+    double h2_1;
+    double h2_2;
+    double ozone;
+};
+
+extern struct SensorData hydrogenOzoneData;
+
 int main()
 {
     char buffer[255];
@@ -67,6 +75,9 @@ int main()
                     int parsed = sscanf(line.c_str(), "First H2: %f, Second H2: %f, Ozone: %f", &h2_1, &h2_2, &ozone);
                     if (parsed == 3)
                     {
+                        data.h2_1 = h2_1;
+                        data.h2_2 = h2_2;
+                        data.ozone = ozone;
                         printf("Received floats: %f, %f, %f\n", h2_1, h2_2, ozone);
                     }
                     else
