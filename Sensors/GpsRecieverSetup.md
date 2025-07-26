@@ -52,6 +52,18 @@ Or if you'd like to know which port it's reading on
 gpsmon
 ```
 
+Check status of gpsd socket
+
+```bash
+systemctl status gpsd.socket
+```
 
 ## Connection
 Client applications typically communicate with gpsd via a TCP/IP port, port **2947** by default. Use Rover NUC network IP and 2947 as port to connect to GPSD NMEA stream.
+
+## Notes
+If using gpsd config, make sure that -G parameter is set and the ListenStream parameter exposes an empty address (e.g 0.0.0.0.2947) in one of these files to ensure gps data can be accessed over the network: 
+- /etc/systemd/system/sockets.target.wants/gpsd.socket
+- /lib/systemd/system/gpsd.socket
+- /usr/lib/systemd/system/gpsd.socket
+
