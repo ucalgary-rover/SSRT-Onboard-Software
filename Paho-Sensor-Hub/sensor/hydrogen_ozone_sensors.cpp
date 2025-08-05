@@ -96,10 +96,14 @@ int main()
     {
         Reading r = readSensors(); // <‑‑  taking one sample
 
+        // read geiger
+        int geiger = readGeiger();
+
         json payload = {// making a JSON object, each one corresponds to what we need
                         {"h2_1", r.h2_1},
                         {"h2_2", r.h2_2},
                         {"ozone", r.ozone},
+                        {"geiger", geiger},
                         {"ts", r.ts_ms}};
 
         Gnss gnf = fetchGnss(gps);
