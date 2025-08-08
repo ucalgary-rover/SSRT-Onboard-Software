@@ -13,6 +13,7 @@ struct Reading
     float h2_1; // ppm or whatever units
     float h2_2;
     float ozone;
+    uint16_t geiger;
     uint64_t ts_ms; // timestamp if we need it
 };
 

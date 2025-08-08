@@ -55,14 +55,15 @@ Reading readSensors()
         return {}; // handle read error / no data
     buf[n] = '\0';
 
-    int h1, h2, oz;
-    sscanf(buf, "%d,%d,%d", &h1, &h2, &oz);
+    int h1, h2, oz, geiger;
+    sscanf(buf, "%d,%d,%d,%d", &h1, &h2, &oz, &geiger);
 
     Reading r{};
     const float VREF = 5.0f;
     r.h2_1 = h1 * VREF / 1023;
     r.h2_2 = h2 * VREF / 1023;
     r.ozone = oz * VREF / 1023;
+    r.geiger = geiger;
     r.ts_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
                   std::chrono::system_clock::now().time_since_epoch())
                   .count();
@@ -96,14 +97,11 @@ int main()
     {
         Reading r = readSensors(); // <‑‑  taking one sample
 
-        // read geiger
-        int geiger = readGeiger();
-
         json payload = {// making a JSON object, each one corresponds to what we need
                         {"h2_1", r.h2_1},
                         {"h2_2", r.h2_2},
                         {"ozone", r.ozone},
-                        {"geiger", geiger},
+                        {"geiger", r.geiger},
                         {"ts", r.ts_ms}};
 
         Gnss gnf = fetchGnss(gps);
