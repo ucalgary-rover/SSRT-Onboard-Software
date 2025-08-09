@@ -1,0 +1,5 @@
+*.exe
+.vscode/*
+
+/Old/DummyCameraApp/build/*
+/Old/DummyCameraApp/.qtc_clangd/*

@@ -8,36 +8,32 @@
 pip list
 ```
 
-1. Make sure you have Python installed, if you don't have it, use the following command:
+1. Run install.sh to setup the virtual environment
 
-```
-sudo apt update
-sudo apt install python3
-```
-
-2. Make sure you have OpenCV installed, if you don't, use the following command:
-
-```
-sudo apt update
-sudo apt install python3-opencv
+```bash
+./install.sh
 ```
 
-3. Make sure you have Flask installed, if you don't, use the following command:
+if necessary run:
 
-```
-sudo apt update
-sudo apt install python3-flask
-```
-
-4. Make sure you have psutil installed, if you don't, use the following command:
-
-```
-sudo apt update
-sudo apt install python3-psutil
+```bash
+chmod +x install.sh
 ```
 
-5. Run the server using the following command (once you're in the directory the file is in, in the terminal):
+2. Activate the virtual environment using
 
+```bash
+source venv/bin/activate
 ```
-python3 CameraFeedServer.py
+
+3. Run the server using the following command (once you're in the directory the file is in, in the terminal):
+
+```bash
+python CameraFeedServer.py
+```
+
+4. Deactivate the virtual environment using
+
+```bash
+deactivate
 ```
