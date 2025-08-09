@@ -1,5 +1,4 @@
 #include "IMUDataParse.hpp"
-
 // Step 1, TransducerM communication library instantiation:
 EasyObjectDictionary eOD;
 EasyProfile eP(&eOD);

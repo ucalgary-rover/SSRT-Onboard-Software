@@ -1,3 +1,5 @@
+#ifndef IMU_DATA_PARSE
+
 // To use the communication library, we need to include the following
 // two header files:
 #include "EasyProfile/EasyObjectDictionary.h"
@@ -21,3 +23,7 @@
 
 // to compile
 // g++ IMUDataParse.cpp EasyProfile/EasyProfile.cpp EasyProfile/EasyObjectDictionary.cpp EasyProfile/EasyProtocol.cpp serialib-master/serialib.cpp -o IMUDataParse
+
+void IMU_RPY(float *array, int port, char *buffer);
+
+#endif
