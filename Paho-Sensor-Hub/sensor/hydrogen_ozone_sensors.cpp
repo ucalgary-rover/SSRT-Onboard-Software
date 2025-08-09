@@ -12,7 +12,6 @@
 #include <chrono>
 #include <gps.h>
 #include <ctime>
-#include "IMUDataParse.hpp"
 
 using json = nlohmann::json; // easier this way, trust
 
@@ -107,12 +106,6 @@ int main()
                         {"ozone", r.ozone},
                         {"geiger", r.geiger},
                         {"ts", r.ts_ms}};
-
-        IMU_RPY(RPY, 4, buffer);
-
-        payload["roll"] = RPY[0];
-        payload["pitch"] = RPY[1];
-        payload["yaw"] = RPY[2];
 
         Gnss gnf = fetchGnss(gps);
         if (gnf.valid())
