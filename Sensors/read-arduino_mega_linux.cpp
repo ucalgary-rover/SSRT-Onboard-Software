@@ -6,7 +6,7 @@
 #include <unistd.h>
 
 #define PORT "/dev/ttyACM0" // replace with actual port
-#define BAUD_RATE B115200   // based on geiger counter specs
+#define BAUD_RATE B9600   // based on geiger counter specs
 
 struct SensorData {
     double h2_1;
