@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <thread>
-#include <nlohmann/json.hpp>      // sudo apt install nlohmann-json3-dev
+#include <nlohmann/json.hpp> // sudo apt install nlohmann-json3-dev
 #include "sensors.hpp"
 #include <fcntl.h>
 #include <unistd.h>
@@ -13,8 +13,7 @@
 #include <gps.h>
 #include <ctime>
 
-
-using json = nlohmann::json;      // easier this way, trust
+using json = nlohmann::json; // easier this way, trust
 
 struct Gnss {
     double lat{}, lon{}, alt{};
@@ -41,6 +40,11 @@ Gnss fetchGnss(gps_data_t& g){
     return gn;
 }
 
+Reading readSensors()
+{
+    static int fd = -1;
+    if (fd < 0) // open once
+        fd = open("/dev/serial/by-id/usb-Arduino__www.arduino.cc__0043_85430363938351607160-if00", O_RDWR | O_NOCTTY);
 
 Reading readSensors() {
     static int fd = -1;
