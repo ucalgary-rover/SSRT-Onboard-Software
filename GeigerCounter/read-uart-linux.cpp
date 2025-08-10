@@ -5,7 +5,7 @@
 #include <termios.h>
 #include <unistd.h>
 
-#define PORT "/dev/ttyACM0" // replace with actual port
+#define PORT "/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0" // replace with actual port
 #define BAUD_RATE B115200   // based on geiger counter specs
 
 int main()
