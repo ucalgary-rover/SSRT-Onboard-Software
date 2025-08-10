@@ -1,19 +1,10 @@
-// THIS HAS NOT BEEN TESTED YET!!
+#include "geiger-counter.hpp"
 
-#include <iostream>
-#include <fcntl.h>
-#include <termios.h>
-#include <unistd.h>
-#include <thread>
-#include <chrono>
+// THIS FILE IS TO BE USED IF WE CAN'T PUT THE GEIGER ON THE ARDUINO WITH THE OTHER SENSORS
+// AKA IF IT'S BEING USED ON THE NANO	
 
-#define PORT "/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0" // replace with actual port
-#define BAUD_RATE B115200   // based on geiger counter specs
 
-int main()
-{
-    char buffer[255];
-
+int setup() {
     int serialPort = open(PORT, O_RDWR | O_NOCTTY); // read/write and do not take control of terminal
     if (serialPort < 0)
     {
@@ -52,26 +43,42 @@ int main()
         perror("Failed to set attributes");
         return 1;
     }
+    
+    return serialPort;
+}
 
+unsigned char readGeiger(int serialPort) {
+    unsigned char byte;
+    int n = read(serialPort, &byte, 1);
+    if (n > 0)
+    {
+        // insert useful code to forward to base computer here
+        return byte;
+    }
+    else if (n < 0)
+    {
+       perror("Read error");
+       return byte;
+    }
+}
+
+
+int main()
+{
+    int serialPort = setup();
+    if(serialPort != 0) {
+       std::cout<<"Failed to initialize"<<std::endl;
+    }
+
+    unsigned char geiger;
     // Read loop
     while (true)
     {
-        unsigned char byte;
-        int n = read(serialPort, &byte, 1);
-        if (n > 0)
-        {
-            // insert useful code to forward to base computer here
-            printf("Received: %d\n", byte);
-        }
-        else if (n < 0)
-        {
-            perror("Read error");
-            break;
-        }
-        
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        geiger = readGeiger(serialPort);
+        printf("Received: %d\n", geiger);
     }
 
     close(serialPort);
     return 0;
 }
+

@@ -12,6 +12,7 @@
 #include <chrono>
 #include <gps.h>
 #include <ctime>
+#include "geiger-counter.hpp"
 
 using json = nlohmann::json; // easier this way, trust
 
@@ -55,14 +56,15 @@ Reading readSensors()
         return {}; // handle read error / no data
     buf[n] = '\0';
 
-    int h1, h2, oz, geiger;
-    sscanf(buf, "%d,%d,%d,%d", &h1, &h2, &oz, &geiger);
+    int h1, h2, oz;
+    sscanf(buf, "%d,%d,%d", &h1, &h2, &oz);
 
     Reading r{};
     const float VREF = 5.0f;
     r.h2_1 = h1 * VREF / 1023;
     r.h2_2 = h2 * VREF / 1023;
     r.ozone = oz * VREF / 1023;
+
     r.ts_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
                   std::chrono::system_clock::now().time_since_epoch())
                   .count();
@@ -79,6 +81,7 @@ int main()
 {
     mqtt::async_client cli(BROKER, CLIENTID);
     cli.connect()->wait();
+    int geigerPort = setup();
 
     // connecting to gpsd
     gps_data_t gps;
@@ -92,14 +95,17 @@ int main()
     }
     std::cout << "Connected\n";
 
+    unsigned char geiger = 0x00;
     while (true)
     {
         Reading r = readSensors(); // <‑‑  taking one sample
+        geiger = readGeiger(geigerPort);
 
         json payload = {// making a JSON object, each one corresponds to what we need
                         {"h2_1", r.h2_1},
                         {"h2_2", r.h2_2},
                         {"ozone", r.ozone},
+                        {"geiger", geiger},
                         {"ts", r.ts_ms}};
 
         Gnss gnf = fetchGnss(gps);

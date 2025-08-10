@@ -17,7 +17,7 @@ int readGeiger()
     static int fd = -1;
     if (fd < 0)
     { // open once
-        fd = open("REPLACE WITH ARDUINO NANO STRING", O_RDWR | O_NOCTTY);
+        fd = open("/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0", O_RDWR | O_NOCTTY);
     }
 
     char buf[8];
