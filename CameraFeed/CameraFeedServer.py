@@ -3,7 +3,80 @@ import psutil
 import time
 import glob
 from threading import Thread, Lock, Event
-from flask import Flask, Response, request
+
+from flask import Flask, Response, request, render_template_string
+
+PAGE = """
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Camera Feeds</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 16px; }
+    .controls { margin-bottom: 12px; display:flex; gap:16px; align-items:center; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 12px; }
+    .card { border: 1px solid #ddd; border-radius: 8px; padding: 8px; }
+    .card header { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+    img { width: 100%; height: auto; background:#000; }
+    label { cursor: pointer; user-select:none; }
+  </style>
+</head>
+<body>
+  <h1>Camera Feeds</h1>
+  <div class="controls">
+    <label><input id="detectAll" type="checkbox"> Show ArUco overlays</label>
+    <span id="status"></span>
+  </div>
+  <div class="grid" id="grid">
+    {% for cam in cams %}
+    <div class="card" data-cam="{{ cam }}">
+      <header>
+        <strong>Camera /dev/video{{ cam }}</strong>
+        <label><input class="detect" type="checkbox"> Detect</label>
+      </header>
+      <img class="stream" src="/video_feed/{{ cam }}">
+    </div>
+    {% endfor %}
+  </div>
+
+  <script>
+    // Helper to rebuild src with detect=0/1
+    function setDetect(img, cam, on) {
+      const url = new URL(window.location.origin + "/video_feed/" + cam);
+      url.searchParams.set("detect", on ? "1" : "0");
+      img.src = url.toString();
+    }
+
+    // Wire per-card detect toggles
+    document.querySelectorAll(".card").forEach(card => {
+      const cam = card.dataset.cam;
+      const img = card.querySelector(".stream");
+      const toggle = card.querySelector(".detect");
+      toggle.addEventListener("change", () => setDetect(img, cam, toggle.checked));
+    });
+
+    // Global toggle
+    const detectAll = document.getElementById("detectAll");
+    detectAll.addEventListener("change", () => {
+      document.querySelectorAll(".card").forEach(card => {
+        const cam = card.dataset.cam;
+        const img = card.querySelector(".stream");
+        const toggle = card.querySelector(".detect");
+        toggle.checked = detectAll.checked;
+        setDetect(img, cam, detectAll.checked);
+      });
+    });
+
+    // Simple “alive” heartbeat text
+    const status = document.getElementById("status");
+    setInterval(() => {
+      status.textContent = "Updated " + new Date().toLocaleTimeString();
+    }, 1000);
+  </script>
+</body>
+</html>
+"""
 
 # — ArUco setup with fallbacks —
 try:
@@ -18,6 +91,14 @@ ARUCO_DICT = aruco.getPredefinedDictionary(aruco.DICT_6X6_250)
 ARUCO_PARAMS = aruco.DetectorParameters()
 
 app = Flask(__name__)
+
+@app.route("/")
+def index():
+    # Use cameras discovered at startup
+    cams = sorted(valid_cameras)
+    if not cams:
+        return "No cameras found.", 500
+    return render_template_string(PAGE, cams=cams)
 
 # Global dictionaries to store camera frames, locks, threads, stop events, usage counts, and detect flags.
 camera_feeds = {}  # {camera_index: latest JPEG frame bytes}
@@ -213,7 +294,6 @@ def video_feed(camera_index):
         mimetype="multipart/x-mixed-replace; boundary=frame",
     )
 
-
 if __name__ == "__main__":
     # Detect valid cameras at startup
     cams = list_valid_cameras()
@@ -227,4 +307,4 @@ if __name__ == "__main__":
     Thread(target=monitor_bandwidth, daemon=True).start()
 
     # Run the Flask application.
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=8995)

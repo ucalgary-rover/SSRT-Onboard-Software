@@ -1,6 +1,0 @@
-<RCC>
-  <qresource prefix="/qt/qml/DummyCameraApp/">
-    <file alias="Main.qml">/home/youssef/Desktop/SSRT Stuff/DummyCameraApp/Main.qml</file>
-  </qresource>
-</RCC>
-

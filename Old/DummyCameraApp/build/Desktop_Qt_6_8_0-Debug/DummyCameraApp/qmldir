@@ -1,5 +1,0 @@
-module DummyCameraApp
-typeinfo appDummyCameraApp.qmltypes
-prefer :/qt/qml/DummyCameraApp/
-Main 1.0 Main.qml
-
