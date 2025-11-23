@@ -1,0 +1,31 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+    -   id: check-yaml
+    -   id: end-of-file-fixer
+    -   id: trailing-whitespace # remove trailing whitespace
+    -   id: check-ast   # make sure it's valid python code
+    -   id: check-docstring-first   # make sure there's no code before a docstring
+    -   id: check-merge-conflict    # make sure there's no merge conflict strings
+    -   id: mixed-line-ending       # make sure all line endings are only \n NOT \r\n
+        args:
+        -   --fix=auto
+    -   id: check-json
+    -   id: pretty-format-json
+        args: [--autofix, --indent=4]
+- repo: https://github.com/pocc/pre-commit-hooks
+  rev: v1.3.5
+  hooks:
+    -   id: clang-format
+        args: [--style=Google]
+    -   id: clang-tidy
+    -   id: oclint
+    -   id: uncrustify
+    -   id: cppcheck
+    -   id: cpplint
+    -   id: include-what-you-use
+-   repo: https://github.com/psf/black
+    rev: 22.10.0
+    hooks:
+    -   id: black   # reformat and make things pretty
