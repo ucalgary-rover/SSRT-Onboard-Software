@@ -1,2 +1,6 @@
-*.exe
-.vscode/*
+# Ignore all
+*
+
+# Unignore all with extensions & all directories
+!*.*
+!*/
