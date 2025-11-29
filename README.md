@@ -20,7 +20,7 @@ Code to read from the sensors and publish that data to an MQTT server. All comma
 
 ```bash
 sudo apt-get update
-sudo apt install git cmake build-essential libssl-dev
+sudo apt install git cmake build-essential libssl-dev mosquitto mosquitto-clients
 ```
 
 2. Build Paho MQTT C from source
@@ -47,7 +47,6 @@ cd ..
 ```bash
 echo "/usr/local/lib" | sudo tee /etc/ld.so.conf.d/paho.conf
 sudo ldconfig
-sudo systemctl start mosquitto
 ```
 
 ### Build
