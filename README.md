@@ -47,6 +47,7 @@ cd ..
 ```bash
 echo "/usr/local/lib" | sudo tee /etc/ld.so.conf.d/paho.conf
 sudo ldconfig
+sudo systemctl start mosquitto
 ```
 
 ### Build
