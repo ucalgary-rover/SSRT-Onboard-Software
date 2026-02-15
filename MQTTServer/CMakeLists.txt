@@ -8,18 +8,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Enable compilation database generation
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Create symlink in source directory for clang-tidy
-if(CMAKE_EXPORT_COMPILE_COMMANDS)
-    add_custom_target(
-        copy_compile_commands ALL
-        COMMAND ${CMAKE_COMMAND} -E create_symlink
-            ${CMAKE_BINARY_DIR}/compile_commands.json
-            ${CMAKE_SOURCE_DIR}/compile_commands.json
-        DEPENDS ${CMAKE_BINARY_DIR}/compile_commands.json
-        COMMENT "Creating symlink to compile_commands.json"
-    )
-endif()
-
 # Find required packages
 find_library(PAHO_MQTTPP3 paho-mqttpp3 REQUIRED)
 find_library(PAHO_MQTT3A paho-mqtt3a REQUIRED)
