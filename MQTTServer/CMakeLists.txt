@@ -1,0 +1,29 @@
+cmake_minimum_required(VERSION 3.10)
+project(mqtt-server)
+
+# Set C++ standard
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Find required packages
+find_library(PAHO_MQTTPP3 paho-mqttpp3 REQUIRED)
+find_library(PAHO_MQTT3A paho-mqtt3a REQUIRED)
+
+# build dependencies from source where possible
+add_subdirectory(dependencies/cpp-dotenv)
+
+# Create the mqtt-server executable
+add_executable(mqtt-server mqtt-server.cpp)
+
+# Link libraries
+target_link_libraries(mqtt-server
+  PRIVATE
+    paho-mqttpp3
+    paho-mqtt3a
+    cpp_dotenv
+)
+
+target_include_directories(mqtt-server
+  PRIVATE
+    /usr/local/include
+)
