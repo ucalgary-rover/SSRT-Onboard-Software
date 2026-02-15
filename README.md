@@ -1,10 +1,22 @@
 # SSRT-Onboard-Software
 Repository for storing code that will be run on the rover.
 
+## Setup
+
+Make sure you have an SSH key for your GitHub account. If you don't, see the [Telemetry Instructions](https://github.com/ucalgary-rover/SSRT-Telemetry/blob/main/docs/project-setup.md) for instructions on how to set one up.
+
+Clone the repository using
+
+```bash
+mkdir Your/Desired/Directory
+cd Your/Desired/Directory/
+git clone git@github.com/ucalgary-rover/SSRT-Onboard-Software
+cd SSRT-Onboard-Software
+```
 ## CameraFeed
 Code for the camera feed servers. Uses a Python Flask server to stream data from all video ports available
 
-### Installz
+### Install
 Navigate to the `CameraFeed` directory. Run the following
 ```
 ./insall.sh
@@ -19,8 +31,8 @@ Code to read from the sensors and publish that data to an MQTT server. All comma
 1. Install prerequisites
 
 ```bash
-sudo apt update
-sudo apt install git cmake build-essential libssl-dev
+sudo apt-get update
+sudo apt install git cmake build-essential libssl-dev mosquitto mosquitto-clients
 ```
 
 2. Build Paho MQTT C from source
