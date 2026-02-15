@@ -20,6 +20,7 @@ repos:
     -   id: clang-format
         args: [--style=Google]
     -   id: clang-tidy
+        args: ['-p=MQTTServer/build']   # tell clang-tidy where to find compile_commands.json
     -   id: oclint
     -   id: uncrustify
     -   id: cppcheck
