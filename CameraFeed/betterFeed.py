@@ -6,7 +6,9 @@ from flask import Flask, Response, request
 try:
     import cv2.aruco as aruco
 except ImportError:
-    raise RuntimeError("cv2.aruco module not found! Install with: pip install opencv-contrib-python")
+    raise RuntimeError(
+        "cv2.aruco module not found! Install with: pip install opencv-contrib-python"
+    )
 
 ARUCO_DICT = aruco.getPredefinedDictionary(aruco.DICT_6X6_250)
 ARUCO_PARAMS = aruco.DetectorParameters()
@@ -20,6 +22,7 @@ camera_stop_events = {}
 camera_detect_flags = {}
 valid_cameras = set()
 
+
 def list_valid_cameras():
     valid = []
     for device in glob.glob("/dev/video*"):
@@ -32,6 +35,7 @@ def list_valid_cameras():
             valid.append(idx)
             cap.release()
     return valid
+
 
 def camera_thread(camera_index, stop_event, detect=False):
     device = f"/dev/video{camera_index}"
@@ -48,7 +52,9 @@ def camera_thread(camera_index, stop_event, detect=False):
             continue
         if detect:
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            corners, ids, _ = aruco.detectMarkers(gray, ARUCO_DICT, parameters=ARUCO_PARAMS)
+            corners, ids, _ = aruco.detectMarkers(
+                gray, ARUCO_DICT, parameters=ARUCO_PARAMS
+            )
             if ids is not None:
                 aruco.drawDetectedMarkers(frame, corners, ids)
         ret, buffer = cv2.imencode(".jpg", frame, compression_params)
@@ -57,12 +63,14 @@ def camera_thread(camera_index, stop_event, detect=False):
                 camera_feeds[camera_index] = buffer.tobytes()
     cap.release()
 
+
 def generate_frames(camera_index):
     while True:
         with camera_locks[camera_index]:
             frame = camera_feeds.get(camera_index)
         if frame:
             yield b"--frame\r\nContent-Type: image/jpeg\r\n\r\n" + frame + b"\r\n"
+
 
 @app.route("/video_feed/<int:camera_index>")
 def video_feed(camera_index):
@@ -78,10 +86,16 @@ def video_feed(camera_index):
         stop_event = Event()
         camera_stop_events[camera_index] = stop_event
         camera_detect_flags[camera_index] = detect
-        t = Thread(target=camera_thread, args=(camera_index, stop_event, detect), daemon=True)
+        t = Thread(
+            target=camera_thread, args=(camera_index, stop_event, detect), daemon=True
+        )
         camera_threads[camera_index] = t
         t.start()
-    return Response(generate_frames(camera_index), mimetype="multipart/x-mixed-replace; boundary=frame")
+    return Response(
+        generate_frames(camera_index),
+        mimetype="multipart/x-mixed-replace; boundary=frame",
+    )
+
 
 if __name__ == "__main__":
     cams = list_valid_cameras()
