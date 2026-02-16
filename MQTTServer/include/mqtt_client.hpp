@@ -9,11 +9,11 @@
 
 class MQTTClient {
 private:
-    std::unique_ptr<mqtt::async_client> client_;
-    std::atomic<bool> shutdown_requested_{false};
+    std::unique_ptr<mqtt::async_client> m_client;
+    std::atomic<bool> m_shutdown_requested{false};
 
 public:
-    MQTTClient(const std::string& server, const std::string& client_id);
+    MQTTClient(const std::string& server, const std::string& m_clientid);
     ~MQTTClient();
 
     void connect();
