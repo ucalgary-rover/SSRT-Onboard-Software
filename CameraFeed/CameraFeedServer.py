@@ -92,6 +92,7 @@ ARUCO_PARAMS = aruco.DetectorParameters()
 
 app = Flask(__name__)
 
+
 @app.route("/")
 def index():
     # Use cameras discovered at startup
@@ -99,6 +100,7 @@ def index():
     if not cams:
         return "No cameras found.", 500
     return render_template_string(PAGE, cams=cams)
+
 
 # Global dictionaries to store camera frames, locks, threads, stop events, usage counts, and detect flags.
 camera_feeds = {}  # {camera_index: latest JPEG frame bytes}
@@ -293,6 +295,7 @@ def video_feed(camera_index):
         generate_frames(camera_index),
         mimetype="multipart/x-mixed-replace; boundary=frame",
     )
+
 
 if __name__ == "__main__":
     # Detect valid cameras at startup

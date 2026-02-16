@@ -1,9 +1,12 @@
 from flask import Flask
+
 app = Flask(__name__)
+
 
 @app.get("/")
 def root():
     return "it lives"
+
 
 if __name__ == "__main__":
     print("Starting", __file__)

@@ -1,6 +1,2 @@
-# Ignore all
-*
-
-# Unignore all with extensions & all directories
-!*.*
-!*/
+# Ignore build
+build/
