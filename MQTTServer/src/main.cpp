@@ -3,6 +3,7 @@
 #include <atomic>
 #include <chrono>
 #include <csignal>
+#include <filesystem>
 #include <iostream>
 #include <thread>
 #include <vector>
@@ -31,6 +32,9 @@ int main() {
 
     // load environment variables
     // TODO: error handling if this file is not found
+    if (!std::filesystem::exists("config.env")) {
+        throw std::runtime_error("config.env file not found");
+    }
     auto& env_values = dotenv::env.load_dotenv("config.env");
 
     try {
