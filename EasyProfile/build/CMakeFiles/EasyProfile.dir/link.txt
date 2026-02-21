@@ -1,0 +1,2 @@
+/usr/bin/ar qc libEasyProfile.a CMakeFiles/EasyProfile.dir/EasyObjectDictionary.cpp.o CMakeFiles/EasyProfile.dir/EasyProfile.cpp.o CMakeFiles/EasyProfile.dir/EasyProtocol.cpp.o
+/usr/bin/ranlib libEasyProfile.a

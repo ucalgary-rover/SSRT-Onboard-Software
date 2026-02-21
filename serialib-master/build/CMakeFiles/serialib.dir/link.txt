@@ -1,0 +1,2 @@
+/usr/bin/ar qc libserialib.a CMakeFiles/serialib.dir/serialib.cpp.o
+/usr/bin/ranlib libserialib.a

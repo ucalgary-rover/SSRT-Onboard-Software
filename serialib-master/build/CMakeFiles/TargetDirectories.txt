@@ -1,0 +1,7 @@
+/root/rover/SSRT-Onboard-Software2/serialib-master/build/CMakeFiles/serialib.dir
+/root/rover/SSRT-Onboard-Software2/serialib-master/build/CMakeFiles/edit_cache.dir
+/root/rover/SSRT-Onboard-Software2/serialib-master/build/CMakeFiles/rebuild_cache.dir
+/root/rover/SSRT-Onboard-Software2/serialib-master/build/CMakeFiles/list_install_components.dir
+/root/rover/SSRT-Onboard-Software2/serialib-master/build/CMakeFiles/install.dir
+/root/rover/SSRT-Onboard-Software2/serialib-master/build/CMakeFiles/install/local.dir
+/root/rover/SSRT-Onboard-Software2/serialib-master/build/CMakeFiles/install/strip.dir

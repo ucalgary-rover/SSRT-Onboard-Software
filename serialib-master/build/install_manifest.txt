@@ -1,0 +1,4 @@
+/usr/local/lib/libserialib.a
+/usr/local/include/serialib/serialib.h
+/usr/local/lib/cmake/serialib/serialibTargets.cmake
+/usr/local/lib/cmake/serialib/serialibTargets-noconfig.cmake

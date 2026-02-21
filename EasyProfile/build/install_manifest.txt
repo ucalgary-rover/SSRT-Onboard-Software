@@ -1,0 +1,8 @@
+/usr/local/lib/libEasyProfile.a
+/usr/local/include/EasyProfile/EasyProfile.h
+/usr/local/include/EasyProfile/EasyObjectDictionary.h
+/usr/local/include/EasyProfile/EasyProtocol.h
+/usr/local/include/EasyProfile/BasicTypes.h
+/usr/local/include/EasyProfile/EasyQueue.h
+/usr/local/lib/cmake/EasyProfile/EasyProfileTargets.cmake
+/usr/local/lib/cmake/EasyProfile/EasyProfileTargets-noconfig.cmake

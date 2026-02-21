@@ -43,6 +43,25 @@ sudo cmake --install build
 cd ..
 ```
 
+4. Build EasyProfile
+```bash
+cd ..
+cd EasyProfile
+cmake -Bbuild .
+cmake --build build
+sudo cmake --install build
+cd ..
+```
+
+4. Build serialib-master
+```bash
+cd serialib-master
+cmake -Bbuild .
+cmake --build build
+sudo cmake --install build
+cd ..
+```
+
 4. Update the system library paths
 ```bash
 echo "/usr/local/lib" | sudo tee /etc/ld.so.conf.d/paho.conf
