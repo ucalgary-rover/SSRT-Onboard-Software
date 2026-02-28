@@ -1,0 +1,3 @@
+[submodule "MQTTServer/dependencies/cpp-dotenv"]
+	path = MQTTServer/dependencies/cpp-dotenv
+	url = git@github.com:adeharo9/cpp-dotenv.git

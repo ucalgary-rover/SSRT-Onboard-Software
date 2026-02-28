@@ -1,6 +1,29 @@
 # SSRT-Onboard-Software
 Repository for storing code that will be run on the rover.
 
+## Setup
+
+Make sure you have an SSH key for your GitHub account. If you don't, see the [Telemetry Instructions](https://github.com/ucalgary-rover/SSRT-Telemetry/blob/main/docs/project-setup.md) for instructions on how to set one up.
+
+Clone the repository using
+
+```bash
+mkdir Your/Desired/Directory
+cd Your/Desired/Directory/
+git clone --recurse-submodules git@github.com/ucalgary-rover/SSRT-Onboard-Software
+cd SSRT-Onboard-Software
+```
+
+Or if already cloned, and needing to update submodules:
+```bash
+git submodule update --init --recursive
+```
+
+Install required libraries for precommit
+```bash
+sudo apt install clang-format clang-tidy
+```
+
 ## CameraFeed
 Code for the camera feed servers. Uses a Python Flask server to stream data from all video ports available
 
@@ -15,15 +38,13 @@ Wait for the install to complete, then follow the instructions from the install 
 ## MQTTServer
 Code to read from the sensors and publish that data to an MQTT server. All commands below will be run in the `MQTTServer` directory.
 
-### Install
-1. Install prerequisites
-
+### Install Paho-MQTT
+1. Make sure `install-paho.sh` is executable
 ```bash
-sudo apt-get update
-sudo apt install git cmake build-essential libssl-dev mosquitto mosquitto-clients
+chmod +x install-paho.sh
 ```
 
-2. Build Paho MQTT C from source
+2. Run `install-paho.sh`
 ```bash
 git clone https://github.com/eclipse/paho.mqtt.c
 cd paho.mqtt.c
@@ -69,7 +90,32 @@ sudo ldconfig
 ```
 
 ### Build
-Run `make` to compile the code. Run `./publisher` to run the server.
+
+1. The first time you build, create the build directory using
+```bash
+mkdir build
+```
+
+2. Enter the build directory
+```bash
+cd build
+```
+
+3. Create the build files
+```bash
+cmake ..
+```
+
+4. Build the executable
+```bash
+make
+```
+
+5. Run the code
+```bash
+cd ..
+./mqtt-server
+```
 
 ### Contributing
 - Please make sure that all files are included in the correct folder.
