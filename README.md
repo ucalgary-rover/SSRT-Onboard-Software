@@ -64,29 +64,31 @@ sudo cmake --install build
 cd ..
 ```
 
-4. Build EasyProfile
+4. Update the system library paths
+```bash
+echo "/usr/local/lib" | sudo tee /etc/ld.so.conf.d/paho.conf
+sudo ldconfig
+```
+
+### Install IMU libaraies
+
+1. Build EasyProfile
 ```bash
 cd ..
 cd EasyProfile
-cmake -Bbuild .
 cmake --build build
+cmake -Bbuild .
 sudo cmake --install build
 cd ..
 ```
 
-5. Build serialib-master
+2. Build serialib-master
 ```bash
 cd serialib-master
 cmake -Bbuild .
 cmake --build build
 sudo cmake --install build
 cd ..
-```
-
-6. Update the system library paths
-```bash
-echo "/usr/local/lib" | sudo tee /etc/ld.so.conf.d/paho.conf
-sudo ldconfig
 ```
 
 ### Build
