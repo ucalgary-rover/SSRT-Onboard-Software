@@ -10,7 +10,7 @@ Clone the repository using
 ```bash
 mkdir Your/Desired/Directory
 cd Your/Desired/Directory/
-git clone --recurse-submodules git@github.com/ucalgary-rover/SSRT-Onboard-Software
+git clone --recurse-submodules git@github.com:ucalgary-rover/SSRT-Onboard-Software.git
 cd SSRT-Onboard-Software
 ```
 
