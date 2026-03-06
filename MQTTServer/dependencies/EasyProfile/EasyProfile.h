@@ -2,7 +2,7 @@
  * Easy Profile
  *
  * @brief  Managing the user-logic for sending and receiving Objects (items of the
- *         Object Dictionary (OD)). 
+ *         Object Dictionary (OD)).
  *
  * @version Jul 27, 2016 - Release Version
  *          Feb 22, 2018 - Regular Update. No functional changes.
@@ -33,12 +33,11 @@
 #define EASYPROFILE_H
 
 #include "BasicTypes.h"
-#include "EasyProtocol.h"
 #include "EasyObjectDictionary.h"
+#include "EasyProtocol.h"
 #ifdef EP_PLATFORM_QT5_
 #include <QtCore>
 #endif
-
 
 #ifdef EP_PLATFORM_QT5_
 class EasyProfile : public QObject {
@@ -47,21 +46,21 @@ class EasyProfile : public QObject {
 class EasyProfile {
 #endif
 public:
-    EasyProfile(EasyObjectDictionary *eOD_i);
+    EasyProfile(EasyObjectDictionary* eOD_i);
     ~EasyProfile();
 
-// Send & Recv Pkg:
+    // Send & Recv Pkg:
 public:
-    int   On_SendPkg(EP_CMD_TYPE_ txPkgCmd, EP_ID_TYPE_ *toId, char **pkgData, int *pkgSize);
-    int   On_RecvPkg(char* data, int dataSize, Ep_Header* header);
+    int On_SendPkg(EP_CMD_TYPE_ txPkgCmd, EP_ID_TYPE_* toId, char** pkgData, int* pkgSize);
+    int On_RecvPkg(char* data, int dataSize, Ep_Header* header);
 
-// External Object Dictionary:
+    // External Object Dictionary:
 protected:
     EasyObjectDictionary* eOD;
 
-// Easy Protocol:
+    // Easy Protocol:
 protected:
-    EasyProtocol *eP;
+    EasyProtocol* eP;
 
 #ifdef EP_PLATFORM_QT5_
 signals:
@@ -78,5 +77,4 @@ signals:
 #endif
 };
 
-
-#endif // EASYPROFILE_H
+#endif  // EASYPROFILE_H

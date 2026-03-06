@@ -38,77 +38,70 @@
 #ifndef EASYPROTOCOL_H
 #define EASYPROTOCOL_H
 
-
-#include "EasyQueue.h"
 #include "BasicTypes.h"
-
+#include "EasyQueue.h"
 
 //------------------------------------------------------------------------------
 // Configure Parameters 1/2
-    //#define EP_TURN_ON_STATISTICS_
-    //#define EP_TURN_ON_DEBUG_
+//#define EP_TURN_ON_STATISTICS_
+//#define EP_TURN_ON_DEBUG_
 // Configure Parameters 1/2
 //------------------------------------------------------------------------------
-
 
 #ifdef EP_TURN_ON_DEBUG_
-    #include <QDebug>
-    #include <QString>
-    #include <QObject>
+#include <QDebug>
+#include <QObject>
+#include <QString>
 #endif
 
-class EasyProtocol
-{
+class EasyProtocol {
 public:
     EasyProtocol();
     virtual ~EasyProtocol();
 
     virtual int Init(int iDataMaxSize, int oDataMaxSize);
 
-    virtual int CreateOutputPackage(
-                  char* payloadData,  int payloadSize,
-                  char** packageData, int* packageSize);
+    virtual int CreateOutputPackage(char* payloadData, int payloadSize, char** packageData,
+                                    int* packageSize);
 
-    virtual int AssembleInputPackage(
-                  char* rawData,      int rawDataLenth,
-                  char **payloadData, int *payloadSize);
+    virtual int AssembleInputPackage(char* rawData, int rawDataLenth, char** payloadData,
+                                     int* payloadSize);
 
+    void SetChecksumOption(char option);
+    int GetInDataMaxSize(void);
+    int GetOutDataMaxSize(void);
+    int GetRoundUp(void);
 
-    void  SetChecksumOption(char option);
-    int   GetInDataMaxSize(void);
-    int   GetOutDataMaxSize(void);
-    int   GetRoundUp(void);
+#ifdef EP_TURN_ON_DEBUG_
+    void DebugPrint(QString title, char* data, int length);
+#endif
 
-#   ifdef EP_TURN_ON_DEBUG_
-    void  DebugPrint(QString title, char* data, int length);
-#   endif
-
-#   ifdef EP_TURN_ON_STATISTICS_
-    virtual int   TotalBytesOfMemoryUsed();
-    int   GetStatistic_Recv_Byte_Total();
+#ifdef EP_TURN_ON_STATISTICS_
+    virtual int TotalBytesOfMemoryUsed();
+    int GetStatistic_Recv_Byte_Total();
     float GetStatistic_Recv_Byte_BadHeadRate();
-    int   GetStatistic_Recv_Pkg_Total();
+    int GetStatistic_Recv_Pkg_Total();
     float GetStatistic_Recv_Pkg_OmitRate();
     float GetStatistic_Recv_Pkg_BadRate();
     float GetStatistic_Recv_Pkg_GoodRate();
-    int   GetStatistic_Send_Pkg_Total();
-#   endif
+    int GetStatistic_Send_Pkg_Total();
+#endif
 
 protected:
-    virtual int UnWrapInData(char* packageData, char**payloadData, int payloadSize);
+    virtual int UnWrapInData(char* packageData, char** payloadData, int payloadSize);
 
     /**
      *  Data Size
      */
-    int    iDS;
-    int    oDS;
+    int iDS;
+    int oDS;
 
 private:
     /**
-      * Statistics
-      */
+     * Statistics
+     */
     int totalMem;
-#   ifdef EP_TURN_ON_STATISTICS_
+#ifdef EP_TURN_ON_STATISTICS_
     unsigned int sRecvByte_Total;  // Total Received Bytes
     unsigned int sRecvByte_BadHead;
     unsigned int sRecvByte_GoodHead;
@@ -117,42 +110,42 @@ private:
     unsigned int sRecvPkg_Good;
     unsigned int sRecvPkg_Bad;
     unsigned int sSendPkg;
-#   endif
+#endif
 
 protected:
     /**
      * Data Frame Wrap & Unwrap Data:
      */
-    char    HEAD_1_;
-    char    HEAD_2_;
-    char    HEAD_LENGTH_;
-    char    HEAD_LENGTH_MSB_AHEAD_;
-    char    SIZE_LENGTH_;
-    int     MAX_PAYLOAD_SIZE_;
-    char    CHECKSUM_LENGTH_;
+    char HEAD_1_;
+    char HEAD_2_;
+    char HEAD_LENGTH_;
+    char HEAD_LENGTH_MSB_AHEAD_;
+    char SIZE_LENGTH_;
+    int MAX_PAYLOAD_SIZE_;
+    char CHECKSUM_LENGTH_;
 
     /**
-      * Receive data auto Round-Up
-      */
-    char    ENABLE_ROUND_UP_;
-    char    ROUND_UP_NUM_;
-    char    roundUpTmp;
+     * Receive data auto Round-Up
+     */
+    char ENABLE_ROUND_UP_;
+    char ROUND_UP_NUM_;
+    char roundUpTmp;
 
     /**
-      * CheckSum
-      */
-    char    CHECKSUM_OPTION_;
+     * CheckSum
+     */
+    char CHECKSUM_OPTION_;
     virtual uint16 Checksum_Generate(char* data, int dataLength);
-    virtual int    Checksum_Verify(  char* data, int dataLength, uint16 checksumToBeVerified);
+    virtual int Checksum_Verify(char* data, int dataLength, uint16 checksumToBeVerified);
 
 private:
-    #define EP_PKG_MODIFIER_SIZE_ ( HEAD_LENGTH_ + SIZE_LENGTH_ + CHECKSUM_LENGTH_)
-    char *outBuf;
-    char *inBuf;
+#define EP_PKG_MODIFIER_SIZE_ (HEAD_LENGTH_ + SIZE_LENGTH_ + CHECKSUM_LENGTH_)
+    char* outBuf;
+    char* inBuf;
     char* p;
     EasyQueue<char> inQueue;
     char omitStream;
-    int  declaredPayloadSize;
+    int declaredPayloadSize;
 };
 
-#endif // EASYPROTOCOL_H
+#endif  // EASYPROTOCOL_H
