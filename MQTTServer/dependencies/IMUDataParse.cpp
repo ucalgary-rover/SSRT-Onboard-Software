@@ -1,5 +1,5 @@
 //command to compile and run:
-//g++ .\IMUDataParse.cpp .\EasyProfile\EasyObjectDictionary.cpp .\EasyProfile\EasyProfile.cpp .\serialib-master\serialib.cpp .\EasyProfile\EasyProtocol.cpp -o test;.\test
+//g++ ./IMUDataParse.cpp ./EasyProfile/EasyObjectDictionary.cpp ./EasyProfile/EasyProfile.cpp ./seriallib/serialib.cpp ./EasyProfile/EasyProtocol.cpp -o test;./test
 
 // To use the communication library, we need to include the following
 // two header files:
@@ -7,7 +7,7 @@
 #include "EasyProfile/EasyProfile.h"
 #include <iostream>
 #include <ctime>
-#include "serialib-master/serialib.h"
+#include "seriallib/serialib.h"
 #include <vector>
 #include <iomanip>
 #include <chrono>
@@ -19,7 +19,7 @@
     #define SERIAL_PORT "\\\\.\\COM3"
 #endif
 #if defined (__linux__) || defined(__APPLE__)
-    #define SERIAL_PORT "/dev/serial/by-id/usb-STMicroelectronics_STM32_Virtual_Comport_206D32785242-if00"
+    #define SERIAL_PORT "/dev/serial/by-id/usb-STMicroelectronics_STM32_Virtual_ComPort_206D32785242-if00"
     #define byte std::byte
 #endif
 //Step 1, TransducerM communication library instantiation:
@@ -96,16 +96,20 @@ void RPY_request(float *array, serialib serial, byte *buffer)
     	rxData[0]=header1;
     	rxData[1]=header2;
     	rxData[2]=length;
+    	
+    	serial.readBytes(buffer, length, 200, 1);
+    	//rxData = (char)(unsigned)buffer;
+    	
     	for(int i = 0; i < length;i++){
-    		serial.readBytes(buffer,1,200,1);
-    		rxData[i+3]=(char)(unsigned)buffer[0];
-		}
-		serial.readBytes(buffer,1,200,1);
-		rxData[length+3]=(char)buffer[0];
-		serial.readBytes(buffer,1,200,1);
-		rxData[length+4]=(char)buffer[0];
-				
-		parse_data(array,rxData,sizeof(rxData));
+		//serial.readBytes(buffer,1,200,1);
+		rxData[i+3]=(char)(unsigned)buffer[i];
+	}
+	serial.readBytes(buffer,1,200,1);
+	rxData[length+3]=(char)buffer[0];
+	serial.readBytes(buffer,1,200,1);
+	rxData[length+4]=(char)buffer[0];
+			
+	parse_data(array,rxData,sizeof(rxData));
 }
 
 void IMU_RPY(float *array,int port, byte *buffer)// *array is a 3 long array, 0 is roll 1 is pitch 2 is yaw, port is which port the IMU is connected to
@@ -126,7 +130,7 @@ void IMU_RPY(float *array,int port, byte *buffer)// *array is a 3 long array, 0 
 int main(){
 	 
 	float RPY[3] = {1,2,3};
-	byte buffer[1];
+	byte buffer[200];
 	
 	
 	const std::chrono::milliseconds interval(100); // 100 ms interval = 10 Hz
