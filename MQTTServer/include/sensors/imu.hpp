@@ -6,6 +6,7 @@
 class IMUSensor : public SensorBase {
 private:
     std::chrono::milliseconds m_update_interval;
+    float m_imu_rpy[3]; // Roll, Pitch, Yaw
 
 protected:
     void sensor_loop() override;

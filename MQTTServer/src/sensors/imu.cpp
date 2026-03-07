@@ -5,8 +5,6 @@
 IMUSensor::IMUSensor(const std::string& topic, std::chrono::milliseconds update_interval)
     : SensorBase(topic), m_update_interval(update_interval) {}
 
-float IMUDimensions[3]; // Pitch, Roll, Yaw
-
 float IMUSensor::generate_data() {
     return (std::rand() % 721) - 360.0f;  // generate a random float between -360 and 360
 }
@@ -22,14 +20,14 @@ void IMUSensor::sensor_loop() {
     while (m_running) {
         // get data
         for (int i = 0; i < 3; ++i) {
-            IMUDimensions[i] = generate_data();
+            m_imu_rpy[i] = generate_data();
         }
 
         // publish data
         if (m_callback) {
-            std::string payload = "Pitch: " + std::to_string(IMUDimensions[0]) +
-                                  ", Roll: " + std::to_string(IMUDimensions[1]) +
-                                  ", Yaw: " + std::to_string(IMUDimensions[2]);
+            std::string payload = "Pitch: " + std::to_string(m_imu_rpy[0]) +
+                                  ", Roll: " + std::to_string(m_imu_rpy[1]) +
+                                  ", Yaw: " + std::to_string(m_imu_rpy[2]);
             m_callback(m_topic, payload);
         }
 
