@@ -31,10 +31,14 @@ public:
     // single read/generate methods that can be called individually as needed
     void read_RPY(float *array, char *buffer); // array is a 3 long array, 0 is roll 1 is pitch 2 is yaw.
                                               // buffer is a large char* that will be written over
+    void read_MAG(float *array,int port, char *buffer);// *array is a 3 long array, 0 is roll 1 is pitch 2 is yaw, port is which port the IMU is connected to
+    
     float generate_data();
 
     // methods to be used inside of the read functions
     void RPY_Request(float *array, serialib serial, char *buffer);
+
+    void MAG_request(float *array, serialib serial, char *buffer);
 
     void Parce_Data(float *array, char* rxData,int rxSize );
 };

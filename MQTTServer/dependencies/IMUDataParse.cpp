@@ -79,7 +79,39 @@ void RPY_request(float *array, serialib serial, char *buffer)
         EP_ID_TYPE_  txToId;
         char*        txPkgData;
         int          txPkgSize;
-        EP_CMD_TYPE_ txCmd = EP_CMD_REQUEST_;                  // Step 3: Define what type of data we are requesting for. (in this example, we are requesting Roll-Pitch-Yaw readings.
+        EP_CMD_TYPE_ txCmd = EP_CMD_RPY_;                  // Step 3: Define what type of data we are requesting for. (in this example, we are requesting Roll-Pitch-Yaw readings.
+        if(EP_SUCC_ == eP.On_SendPkg(txCmd, &txToId, &txPkgData, &txPkgSize)){ // Step 4: create a package out of the data structure (i.e. the payload) to be sent
+			serial.writeBytes(txPkgData,txPkgSize);   // Step 5:  Send the package via Serial Port
+        }
+    }
+
+
+    	char header1 =(char) buffer[0];
+    	serial.readBytes(buffer,1,200,1);
+    	char header2 = (char)buffer[0];
+    	serial.readBytes(buffer,1,200,1);
+    	int length = (char)buffer[0];
+    	char rxData[length+5];
+    	rxData[0]=header1;
+    	rxData[1]=header2;
+    	rxData[2]=length;
+		serial.readBytes(buffer,length,200,1);
+		std::copy((char*)buffer, (char*)buffer + length, rxData + 3);
+		serial.readBytes(buffer,1,200,1);
+		rxData[length+3]=(char)buffer[0];
+		serial.readBytes(buffer,1,200,1);
+		rxData[length+4]=(char)buffer[0];
+
+		parse_data(array,rxData,sizeof(rxData));
+}
+
+void MAG_request(float *array, serialib serial, char *buffer){
+	uint16 toId = EP_ID_BROADCAST_;                          //       You can also choose to boardcast the request without specifying the target device ID
+    if(EP_SUCC_ == eOD.Write_Ep_Request(toId, EP_CMD_RPY_)){   // Step 2: Write the device ID into the data structure (i.e. the request itself) pending to be sent
+        EP_ID_TYPE_  txToId;
+        char*        txPkgData;
+        int          txPkgSize;
+        EP_CMD_TYPE_ txCmd = EP_CMD_Raw_GYRO_ACC_MAG_;                  // Step 3: Define what type of data we are requesting for. (in this example, we are requesting Roll-Pitch-Yaw readings.
         if(EP_SUCC_ == eP.On_SendPkg(txCmd, &txToId, &txPkgData, &txPkgSize)){ // Step 4: create a package out of the data structure (i.e. the payload) to be sent
 			serial.writeBytes(txPkgData,txPkgSize);   // Step 5:  Send the package via Serial Port
         }
@@ -117,6 +149,21 @@ void IMU_RPY(float *array,int port, char *buffer)// *array is a 3 long array, 0 
 
 //	    printf ("Successful connection to %s\n","\\\\.\\COM4");
 	RPY_request(array,serial,buffer);
+		serial.closeDevice();
+}
+
+void IMU_MAG(float *array,int port, char *buffer)// *array is a 3 long array, 0 is roll 1 is pitch 2 is yaw, port is which port the IMU is connected to
+{
+		serialib serial;
+		char errorOpening = serial.openDevice(SERIAL_PORT, 115200);
+		// If connection fails, return the error code otherwise, display a success message
+    	if (errorOpening!=1){
+     		std::cout<< errorOpening;
+//		 	return errorOpening;
+		}
+
+//	    printf ("Successful connection to %s\n","\\\\.\\COM4");
+	MAG_request(array,serial,buffer);
 		serial.closeDevice();
 }
 
