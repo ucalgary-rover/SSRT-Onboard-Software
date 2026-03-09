@@ -96,20 +96,17 @@ void RPY_request(float *array, serialib serial, byte *buffer)
     	rxData[0]=header1;
     	rxData[1]=header2;
     	rxData[2]=length;
-    	
-    	serial.readBytes(buffer, length, 200, 1);
-    	//rxData = (char)(unsigned)buffer;
-    	
+		serial.readBytes(buffer,length,200,1);
+		std::copy((char*)buffer, (char*)buffer + length, rxData + 3);
     	for(int i = 0; i < length;i++){
-		//serial.readBytes(buffer,1,200,1);
-		rxData[i+3]=(char)(unsigned)buffer[i];
-	}
-	serial.readBytes(buffer,1,200,1);
-	rxData[length+3]=(char)buffer[0];
-	serial.readBytes(buffer,1,200,1);
-	rxData[length+4]=(char)buffer[0];
-			
-	parse_data(array,rxData,sizeof(rxData));
+    		rxData[i+3]=(char)(unsigned)buffer[i];
+		}
+		serial.readBytes(buffer,1,200,1);
+		rxData[length+3]=(char)buffer[0];
+		serial.readBytes(buffer,1,200,1);
+		rxData[length+4]=(char)buffer[0];
+				
+		parse_data(array,rxData,sizeof(rxData));
 }
 
 void IMU_RPY(float *array,int port, byte *buffer)// *array is a 3 long array, 0 is roll 1 is pitch 2 is yaw, port is which port the IMU is connected to
