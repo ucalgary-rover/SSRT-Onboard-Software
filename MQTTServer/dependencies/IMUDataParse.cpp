@@ -20,7 +20,6 @@
 #endif
 #if defined (__linux__) || defined(__APPLE__)
     #define SERIAL_PORT "/dev/serial/by-id/usb-STMicroelectronics_STM32_Virtual_ComPort_206D32785242-if00"
-    #define byte std::byte
 #endif
 //Step 1, TransducerM communication library instantiation:
 EasyObjectDictionary eOD;
@@ -43,18 +42,18 @@ void parse_data(
 															// when a complete and correct package has arrived.
 															// Example Reading of the Short ID of the device who sends the data:
 		uint32 fromId = header.fromId; // Step 3.1: Now we are able to read the received payload data
-		
+
 		// header.fromId tells us from which TransducerM the data comes.
 		switch (header.cmd) { // Step 3.2: header.cmd tells what kind of data is inside the payload.
-		
-	
+
+
 			case EP_CMD_RPY_:{
 				Ep_RPY ep_RPY;
 				if(EP_SUCC_ == eOD.Read_Ep_RPY(&ep_RPY)){ // Another Example reading of the received Roll Pitch and Yaw
 					float roll = ep_RPY.roll;
 					float pitch = ep_RPY.pitch;
 					float yaw = ep_RPY.yaw;
-					
+
 //					std::cout<<"roll"<<roll<<"\npitch"<<pitch<<"\nyaw"<<yaw;//use data as you wish
 					array[0]=roll;
 					array[1]=pitch;
@@ -72,7 +71,7 @@ void parse_data(
 	}
 }
 
-void RPY_request(float *array, serialib serial, byte *buffer)
+void RPY_request(float *array, serialib serial, char *buffer)
 {
 //    uint16 toId = ui->spinBox_TX_Request_ShortId->value();     // Step 1: Get the destination device ID to which the request is sent
     uint16 toId = EP_ID_BROADCAST_;                          //       You can also choose to boardcast the request without specifying the target device ID
@@ -84,9 +83,9 @@ void RPY_request(float *array, serialib serial, byte *buffer)
         if(EP_SUCC_ == eP.On_SendPkg(txCmd, &txToId, &txPkgData, &txPkgSize)){ // Step 4: create a package out of the data structure (i.e. the payload) to be sent
 			serial.writeBytes(txPkgData,txPkgSize);   // Step 5:  Send the package via Serial Port
         }
-    }	
-    
-		
+    }
+
+
     	char header1 =(char) buffer[0];
     	serial.readBytes(buffer,1,200,1);
     	char header2 = (char)buffer[0];
@@ -98,18 +97,15 @@ void RPY_request(float *array, serialib serial, byte *buffer)
     	rxData[2]=length;
 		serial.readBytes(buffer,length,200,1);
 		std::copy((char*)buffer, (char*)buffer + length, rxData + 3);
-    	for(int i = 0; i < length;i++){
-    		rxData[i+3]=(char)(unsigned)buffer[i];
-		}
 		serial.readBytes(buffer,1,200,1);
 		rxData[length+3]=(char)buffer[0];
 		serial.readBytes(buffer,1,200,1);
 		rxData[length+4]=(char)buffer[0];
-				
+
 		parse_data(array,rxData,sizeof(rxData));
 }
 
-void IMU_RPY(float *array,int port, byte *buffer)// *array is a 3 long array, 0 is roll 1 is pitch 2 is yaw, port is which port the IMU is connected to
+void IMU_RPY(float *array,int port, char *buffer)// *array is a 3 long array, 0 is roll 1 is pitch 2 is yaw, port is which port the IMU is connected to
 {
 		serialib serial;
 		char errorOpening = serial.openDevice(SERIAL_PORT, 115200);
@@ -118,23 +114,23 @@ void IMU_RPY(float *array,int port, byte *buffer)// *array is a 3 long array, 0 
      		std::cout<< errorOpening;
 //		 	return errorOpening;
 		}
-	
+
 //	    printf ("Successful connection to %s\n","\\\\.\\COM4");
 	RPY_request(array,serial,buffer);
 		serial.closeDevice();
 }
 
 int main(){
-	 
+
 	float RPY[3] = {1,2,3};
-	byte buffer[200];
-	
-	
+	char buffer[200];
+
+
 	const std::chrono::milliseconds interval(100); // 100 ms interval = 10 Hz
 
     while (true) {
-    	
-		
+
+
         auto start = std::chrono::steady_clock::now();
 
         // Call your function
@@ -143,12 +139,12 @@ int main(){
         // Calculate how much time the function took
         auto end = std::chrono::steady_clock::now();
         auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-		
+
         // Sleep for the remainder of the 100ms period, if any time is left
         if (elapsed < interval) {
             std::this_thread::sleep_for(interval - elapsed);
         } else {
-            std::cerr << "Warning: Execution overran the 100ms cycle!\n"; 
+            std::cerr << "Warning: Execution overran the 100ms cycle!\n";
         }
     }
 
