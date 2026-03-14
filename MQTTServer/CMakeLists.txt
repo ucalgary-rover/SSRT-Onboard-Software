@@ -22,13 +22,14 @@ set(SOURCES
   src/utils.cpp
   src/sensors/sensor_base.cpp
   src/sensors/temperature.cpp
+  src/sensors/imu.cpp
 )
 
 set(SERIALLIB_SOURCE
   dependencies/seriallib/serialib.cpp
 )
 set(SERIALLIB_INCLUDE
-  ${CMAKE_SOURCE_DIR}/dependencies/seriallib/serialib
+  ${CMAKE_SOURCE_DIR}/dependencies/seriallib
 )
 
 # Create the ssrt-onboard-software executable
@@ -40,6 +41,7 @@ target_link_libraries(ssrt-onboard-software
     paho-mqttpp3
     paho-mqtt3a
     cpp_dotenv
+    EasyProfile
 )
 
 target_include_directories(ssrt-onboard-software
