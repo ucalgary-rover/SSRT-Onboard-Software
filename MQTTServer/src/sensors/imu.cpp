@@ -18,6 +18,7 @@ void IMUSensor::read_RPY(float *array, char* buffer) {
 	RPY_request(array,serial,buffer);
     serial.closeDevice();
 }
+
 void read_MAG(float *array,int port, char *buffer)// *array is a 3 long array, 0 is roll 1 is pitch 2 is yaw, port is which port the IMU is connected to
 {
 		serialib serial;
