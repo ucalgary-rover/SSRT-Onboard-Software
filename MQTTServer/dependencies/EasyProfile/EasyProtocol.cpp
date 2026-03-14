@@ -59,11 +59,11 @@ EasyProtocol::EasyProtocol() {
 
 EasyProtocol::~EasyProtocol() {
     if (inBuf) {
-        delete inBuf;
+        delete[] inBuf;
         inBuf = 0;
     }
     if (outBuf) {
-        delete outBuf;
+        delete[] outBuf;
         outBuf = 0;
     }
 }
@@ -79,12 +79,12 @@ int EasyProtocol::Init(int iDataSize,  ///< [INPUT]
     if ((iDS > MAX_PAYLOAD_SIZE_) || (oDS > MAX_PAYLOAD_SIZE_))
         return EP_FAIL_;
     if (inBuf) {
-        delete inBuf;
+        delete[] inBuf;
         inBuf = 0;
         totalMem -= (iDS + EP_PKG_MODIFIER_SIZE_);
     }
     if (outBuf) {
-        delete outBuf;
+        delete[] outBuf;
         outBuf = 0;
         totalMem -= (oDS + EP_PKG_MODIFIER_SIZE_);
     }
