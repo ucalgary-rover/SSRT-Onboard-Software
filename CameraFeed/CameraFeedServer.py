@@ -101,6 +101,9 @@ def index():
         return "No cameras found.", 500
     return render_template_string(PAGE, cams=cams)
 
+@app.route("/available_cameras")
+def available_cameras():
+    return {"cameras": sorted(valid_cameras)}
 
 # Global dictionaries to store camera frames, locks, threads, stop events, usage counts, and detect flags.
 camera_feeds = {}  # {camera_index: latest JPEG frame bytes}
