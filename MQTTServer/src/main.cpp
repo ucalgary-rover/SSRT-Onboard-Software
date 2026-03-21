@@ -10,9 +10,9 @@
 
 #include "dotenv.h"
 #include "mqtt_client.hpp"
+#include "sensors/imu.hpp"
 #include "sensors/sensor_base.hpp"
 #include "sensors/temperature.hpp"
-#include "sensors/imu.hpp"
 
 // used for sending disconnect request in signal handler
 MQTTClient* global_mqtt_client = nullptr;
@@ -64,7 +64,7 @@ int main() {
         // sensors.push_back(std::make_unique<TemperatureSensor>(env_values["TEMPERATURE_TOPIC"],
         //                                                       std::chrono::seconds(1)));
         float RPY[3];
-         sensors.push_back(
+        sensors.push_back(
             std::make_unique<IMUSensor>(env_values["IMU_TOPIC"], RPY, std::chrono::seconds(1)));
 
         // start all sensors
