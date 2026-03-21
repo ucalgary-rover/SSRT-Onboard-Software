@@ -19,4 +19,8 @@ public:
     float generate_data();
 };
 
+struct TemperatureData {
+    float temperature;
+};
+
 #endif

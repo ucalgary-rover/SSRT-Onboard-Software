@@ -44,13 +44,12 @@ int main() {
         mqtt.connect();
 
         // callback function for publishing from sensor threads
-        auto publish_to_mqtt_callback = [&mqtt](const std::string& topic,
-                                                const std::string& value) {
+        auto publish_to_mqtt_callback = [&mqtt](const std::string& topic, const void* payload,
+                                                std::size_t length) {
             try {
-                mqtt.publish(topic, value);
-
+                mqtt.publish(topic, payload, length);
                 std::lock_guard<std::mutex> lock(cout_mutex);
-                std::cout << "Published " << value << " to " << topic << std::endl;
+                std::cout << "Published " << length << " bytes to " << topic << std::endl;
             } catch (const std::exception& e) {
                 std::lock_guard<std::mutex> lock(cout_mutex);
                 std::cerr << "Publish error: " << e.what() << std::endl;

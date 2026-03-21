@@ -18,7 +18,7 @@ public:
 
     void connect();
     void disconnect();
-    void publish(const std::string& topic, const std::string& payload);
+    void publish(const std::string& topic, const void* payload, std::size_t length);
     bool should_shutdown() const;
     void request_shutdown();
 };

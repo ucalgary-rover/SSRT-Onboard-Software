@@ -6,8 +6,8 @@
 #include <string>
 #include <thread>
 
-// callback type: void callback(topic, data)
-using t_sensor_callback = std::function<void(const std::string&, const std::string&)>;
+// callback type: void callback(topic, data, size)
+using t_sensor_callback = std::function<void(const std::string&, const void*, size_t)>;
 
 class SensorBase {
 protected:
