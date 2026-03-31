@@ -61,8 +61,8 @@ int main() {
         // create vector to hold the different sensors
         std::vector<std::unique_ptr<SensorBase>> sensors;
 
-        // sensors.push_back(std::make_unique<TemperatureSensor>(env_values["TEMPERATURE_TOPIC"],
-        //                                                       std::chrono::seconds(1)));
+        sensors.push_back(std::make_unique<TemperatureSensor>(env_values["TEMPERATURE_TOPIC"],
+                                                               std::chrono::seconds(1)));
         float RPY[3];
         sensors.push_back(
             std::make_unique<IMUSensor>(env_values["IMU_TOPIC"], RPY, std::chrono::seconds(1)));
