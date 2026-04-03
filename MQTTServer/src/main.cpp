@@ -51,7 +51,7 @@ void handle_cmd_line_args(int argc, char* argv[], const char*& env_file_path) {
                 exit(0);
             case '?':
                 std::cerr << "Unknown option. Use -h or --help for help." << std::endl;
-                break;
+                exit(1);
         }
     }
 }
