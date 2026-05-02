@@ -19,12 +19,22 @@ using byte = std::byte;
 // TransducerM communication library instantiation:
 
 class IMUSensor : public SensorBase {
+    struct IMUData {
+        float roll;
+        float pitch;
+        float yaw;
+        float battery_temp;
+        float power;
+        float heading_deg;
+    };
+
 private:
     std::chrono::milliseconds m_update_interval;
-    float m_imu_rpy[3];  // Roll, Pitch, Yaw
     float* m_rpy_out;
     EasyObjectDictionary eOD;
     EasyProfile eP;
+
+    float random_value();
 
 protected:
     void sensor_loop() override;
@@ -40,7 +50,7 @@ public:
                   byte* buffer);  // *array is a 3 long array, 0 is roll 1 is pitch 2
                                   // is yaw, port is which port the IMU is connected to
 
-    float generate_data();
+    void generate_data(IMUData& data);
 
     // methods to be used inside of the read functions
     void RPY_request(float* array, serialib serial, byte* buffer);

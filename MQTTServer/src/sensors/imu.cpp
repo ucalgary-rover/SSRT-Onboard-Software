@@ -10,8 +10,18 @@ IMUSensor::IMUSensor(const std::string& topic, float* m_rpy_out,
       eOD(EasyObjectDictionary()),
       eP(&eOD) {}
 
-float IMUSensor::generate_data() {
-    return (std::rand() / (float)RAND_MAX) * 720.0f - 360.0f;  // generate a random float between -360 and 360
+float IMUSensor::random_value() {
+    return (std::rand() / (float)RAND_MAX) * 720.0f -
+           360.0f;  // generate a random float between -360 and 360
+}
+
+void IMUSensor::generate_data(IMUData& data) {
+    data.roll = random_value();
+    data.yaw = random_value();
+    data.pitch = random_value();
+    data.battery_temp = random_value();
+    data.power = random_value();
+    data.heading_deg = random_value();
 }
 
 void IMUSensor::read_RPY(float* array, byte* buffer) {
@@ -272,25 +282,18 @@ void IMUSensor::MAG_request(float* array, serialib serial, byte* buffer) {
 //     }
 // }
 void IMUSensor::sensor_loop() {
-    byte buffer[200];
+    IMUData data = {};
 
     while (m_running) {
         // get data
         // read_RPY(m_imu_rpy, buffer);
-        
-		// Generate random data for testing purposes
-		for (int i = 0; i < 5; ++i) {
-             m_imu_rpy[i] = generate_data();
-        }
+
+        // Generate random data for testing purposes
+        generate_data(data);
 
         // publish data
         if (m_callback) {
-            std::string payload = "Roll: " + std::to_string(m_imu_rpy[0]) +
-                                  ", Pitch: " + std::to_string(m_imu_rpy[1]) +
-                                  ", Yaw: " + std::to_string(m_imu_rpy[2]) + 
-								  ", Battery Temp: " + std::to_string(m_imu_rpy[3]) +
-								  ", Power: " + std::to_string(m_imu_rpy[4]);
-            m_callback(m_topic, payload);
+            m_callback(m_topic, &data, sizeof(data));
         }
 
         // wait for more data
