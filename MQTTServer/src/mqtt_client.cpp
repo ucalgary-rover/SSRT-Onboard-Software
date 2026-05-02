@@ -28,16 +28,13 @@ void MQTTClient::disconnect() {
     }
 }
 
-void MQTTClient::publish(const std::string& topic, const std::string& payload) {
+void MQTTClient::publish(const std::string& topic, const void* payload, std::size_t length) {
     if (!m_client->is_connected()) {
         throw std::runtime_error("Cannot publish: not connected to broker");
     }
 
-    mqtt::message_ptr message = mqtt::make_message(topic, payload);
-    message->set_qos(1);
-    message->set_retained(false);
-
-    m_client->publish(message)->wait();
+    mqtt::message_ptr message = mqtt::make_message(topic, payload, length, 1, false);
+    m_client->publish(message);
 }
 
 bool MQTTClient::should_shutdown() const {

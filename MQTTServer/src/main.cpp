@@ -1,3 +1,4 @@
+#include <getopt.h>
 #include <mqtt/async_client.h>
 
 #include <atomic>
@@ -14,6 +15,8 @@
 #include "sensors/sensor_base.hpp"
 #include "sensors/temperature.hpp"
 
+#define DEFAULT_ENV_FILE_PATH "config.env"
+
 // used for sending disconnect request in signal handler
 MQTTClient* global_mqtt_client = nullptr;
 // make sure only one thread is writing at a time
@@ -26,17 +29,50 @@ void signal_handler(int signum) {
     }
 }
 
-int main() {
+void handle_cmd_line_args(int argc, char* argv[], const char*& env_file_path) {
+    static struct option long_options[] = {
+        {"env-file-path", required_argument, nullptr, 'e'},
+        {"help", no_argument, nullptr, 'h'},
+        {nullptr, 0, nullptr, 0},
+    };
+
+    int opt;
+    while ((opt = getopt_long(argc, argv, "e:h", long_options, nullptr)) != -1) {
+        switch (opt) {
+            case 'e':
+                std::cout << "HERE!!" << std::endl;
+                env_file_path = optarg;
+                break;
+            case 'h':
+                std::cout << "Usage: " << argv[0] << " [OPTIONS]\n\n"
+                          << "Options:\n"
+                          << "  -e, --env-file-path <path>  Path to the environment file (default: "
+                          << DEFAULT_ENV_FILE_PATH << ")\n"
+                          << "  -h, --help                  Show this help message\n";
+                exit(0);
+            case '?':
+                std::cerr << "Unknown option. Use -h or --help for help." << std::endl;
+                exit(1);
+        }
+    }
+}
+
+int main(int argc, char* argv[]) {
     // register signal handlers
     signal(SIGINT, signal_handler);   // Ctrl+C
     signal(SIGTERM, signal_handler);  // termination request
 
+    // handle command line arguments
+    const char* env_file_path = DEFAULT_ENV_FILE_PATH;
+    handle_cmd_line_args(argc, argv, env_file_path);
+    std::cout << "Finished command line stuff. " << env_file_path << std::endl;
+
     // load environment variables
     // TODO: error handling if this file is not found
-    if (!std::filesystem::exists("config.env")) {
+    if (!std::filesystem::exists(env_file_path)) {
         throw std::runtime_error("config.env file not found");
     }
-    auto& env_values = dotenv::env.load_dotenv("config.env");
+    auto& env_values = dotenv::env.load_dotenv(env_file_path);
 
     try {
         MQTTClient mqtt(env_values["SERVER_ADDRESS"], env_values["CLIENT_ID"]);
@@ -45,13 +81,12 @@ int main() {
         mqtt.connect();
 
         // callback function for publishing from sensor threads
-        auto publish_to_mqtt_callback = [&mqtt](const std::string& topic,
-                                                const std::string& value) {
+        auto publish_to_mqtt_callback = [&mqtt](const std::string& topic, const void* payload,
+                                                std::size_t length) {
             try {
-                mqtt.publish(topic, value);
-
+                mqtt.publish(topic, payload, length);
                 std::lock_guard<std::mutex> lock(cout_mutex);
-                std::cout << "Published " << value << " to " << topic << std::endl;
+                std::cout << "Published " << length << " bytes to " << topic << std::endl;
             } catch (const std::exception& e) {
                 std::lock_guard<std::mutex> lock(cout_mutex);
                 std::cerr << "Publish error: " << e.what() << std::endl;
@@ -62,7 +97,7 @@ int main() {
         std::vector<std::unique_ptr<SensorBase>> sensors;
 
         sensors.push_back(std::make_unique<TemperatureSensor>(env_values["TEMPERATURE_TOPIC"],
-                                                               std::chrono::seconds(1)));
+                                                              std::chrono::seconds(1)));
         float RPY[3];
         sensors.push_back(
             std::make_unique<IMUSensor>(env_values["IMU_TOPIC"], RPY, std::chrono::seconds(1)));

@@ -18,13 +18,16 @@ float TemperatureSensor::read_data() {
 }
 
 void TemperatureSensor::sensor_loop() {
+    TemperatureData data = {};
+
     while (m_running) {
         // get data
-        float value = generate_data();
+        // float value = generate_data();
+        data.temperature = generate_data();
 
         // publish data
         if (m_callback) {
-            m_callback(m_topic, std::to_string(value));
+            m_callback(m_topic, &data, sizeof(data));
         }
 
         // wait for more data
