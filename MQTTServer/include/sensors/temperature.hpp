@@ -4,9 +4,6 @@
 #include "sensors/sensor_base.hpp"
 
 class TemperatureSensor : public SensorBase {
-private:
-    std::chrono::milliseconds m_update_interval;
-
 protected:
     void sensor_loop() override;
 

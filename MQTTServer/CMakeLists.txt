@@ -21,6 +21,7 @@ set(SOURCES
   src/utils.cpp
   src/sensors/sensor_base.cpp
   src/sensors/temperature.cpp
+  src/sensors/gnss.cpp
 )
 
 # Create the ssrt-onboard-software executable

@@ -11,6 +11,7 @@
 
 #include "dotenv.h"
 #include "mqtt_client.hpp"
+#include "sensors/gnss.hpp"
 #include "sensors/sensor_base.hpp"
 #include "sensors/temperature.hpp"
 
@@ -97,6 +98,8 @@ int main(int argc, char* argv[]) {
 
         sensors.push_back(std::make_unique<TemperatureSensor>(env_values["TEMPERATURE_TOPIC"],
                                                               std::chrono::seconds(1)));
+        sensors.push_back(
+            std::make_unique<GnssSensor>(env_values["GNSS_TOPIC"], std::chrono::milliseconds(500)));
 
         // start all sensors
         for (auto& sensor : sensors) {
