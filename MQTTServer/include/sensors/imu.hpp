@@ -19,14 +19,15 @@ using byte = std::byte;
 // TransducerM communication library instantiation:
 
 class IMUSensor : public SensorBase {
-    struct IMUData {
-        float roll;
-        float pitch;
-        float yaw;
-        float battery_temp;
-        float power;
-        float heading_deg;
-    };
+struct IMUData {
+    float roll;
+    float pitch;
+    float yaw;
+    float battery_temp;
+    float power;
+    float heading_deg;
+    float speed;
+};
 
 private:
     std::chrono::milliseconds m_update_interval;
@@ -34,7 +35,7 @@ private:
     EasyObjectDictionary eOD;
     EasyProfile eP;
 
-    float random_value();
+    float random_value(float max, float min);
 
 protected:
     void sensor_loop() override;

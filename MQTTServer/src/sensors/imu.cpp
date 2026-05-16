@@ -10,18 +10,18 @@ IMUSensor::IMUSensor(const std::string& topic, float* m_rpy_out,
       eOD(EasyObjectDictionary()),
       eP(&eOD) {}
 
-float IMUSensor::random_value() {
-    return (std::rand() / (float)RAND_MAX) * 720.0f -
-           360.0f;  // generate a random float between -360 and 360
+float IMUSensor::random_value(float max, float min) {
+    return (std::rand() / (float)RAND_MAX) * (max - min) + min;
 }
 
 void IMUSensor::generate_data(IMUData& data) {
-    data.roll = random_value();
-    data.yaw = random_value();
-    data.pitch = random_value();
-    data.battery_temp = random_value();
-    data.power = random_value();
-    data.heading_deg = random_value();
+    data.roll = random_value(180.0f, -180.0f);
+    data.yaw = random_value(180.0f, -180.0f);
+    data.pitch = random_value(180.0f, -180.0f);
+    data.battery_temp = random_value(60.0f, 20.0f);
+    data.power = random_value(100.0f, 50.0f);
+    data.heading_deg = 0;
+    data.speed = 0;
 }
 
 void IMUSensor::read_RPY(float* array, byte* buffer) {
@@ -284,12 +284,36 @@ void IMUSensor::MAG_request(float* array, serialib serial, byte* buffer) {
 void IMUSensor::sensor_loop() {
     IMUData data = {};
 
+    IMUSensor::generate_data(data);  // initialize with random data so we have something to publish before the first read
+
     while (m_running) {
         // get data
         // read_RPY(m_imu_rpy, buffer);
 
         // Generate random data for testing purposes
-        generate_data(data);
+        data.roll += random_value(5.0f, -5.0f);
+        if (data.roll > 360) {          // Roll back if we exceed 360
+            data.roll -= 360;
+        } else if (data.roll < 0) {     // Roll forward if we go below 0
+            data.roll += 360;
+        }
+        data.pitch += random_value(5.0f, -5.0f);
+        if (data.pitch > 180) {
+            data.pitch -= 360;
+        } else if (data.pitch < -180) {
+            data.pitch += 360;
+        }
+        data.yaw += random_value(5.0f, -5.0f);
+        if (data.yaw > 180) {
+            data.yaw -= 360;
+        } else if (data.yaw < -180) {
+            data.yaw += 360;
+        }
+        data.battery_temp += random_value(2.0f, -2.0f);
+        data.power += random_value(0.0f, -0.001f);
+        if (data.power < 0) {
+            data.power = 0;
+        }
 
         // publish data
         if (m_callback) {
