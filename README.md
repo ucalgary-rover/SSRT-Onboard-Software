@@ -44,32 +44,6 @@ Code to read from the sensors and publish that data to an MQTT server. All comma
 chmod +x install-paho.sh
 ```
 
-2. Run `install-paho.sh`
-```bash
-git clone https://github.com/eclipse/paho.mqtt.c
-cd paho.mqtt.c
-cmake -Bbuild -DPAHO_BUILD_STATIC=TRUE -DPAHO_WITH_SSL=FALSE .
-cmake --build build
-sudo cmake --install build
-cd ..
-```
-
-3. Build Paho MQTT C++ from source
-```bash
-git clone https://github.com/eclipse/paho.mqtt.cpp
-cd paho.mqtt.cpp
-cmake -Bbuild -DPAHO_BUILD_STATIC=TRUE -DPAHO_WITH_SSL=FALSE -DPAHO_MQTT_C_PATH=/usr/local .
-cmake --build build
-sudo cmake --install build
-cd ..
-```
-
-4. Update the system library paths
-```bash
-echo "/usr/local/lib" | sudo tee /etc/ld.so.conf.d/paho.conf
-sudo ldconfig
-```
-
 ### Install IMU libaraies
 
 1. Build EasyProfile
