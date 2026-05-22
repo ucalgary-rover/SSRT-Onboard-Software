@@ -15,12 +15,14 @@ protected:
     t_sensor_callback m_callback;
     std::atomic<bool> m_running{false};
     std::thread m_sensor_thread;
+    std::chrono::milliseconds m_update_interval;
 
     // overridden by each subclass
     virtual void sensor_loop() = 0;
 
 public:
-    SensorBase(const std::string& topic) : m_topic(topic){};
+    SensorBase(const std::string& topic, const std::chrono::milliseconds& update_interval)
+        : m_topic(topic), m_update_interval(update_interval){};
     virtual ~SensorBase();
     void start(t_sensor_callback callback);
     void stop();

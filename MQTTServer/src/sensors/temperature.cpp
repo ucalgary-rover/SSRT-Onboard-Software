@@ -4,7 +4,7 @@
 
 TemperatureSensor::TemperatureSensor(const std::string& topic,
                                      std::chrono::milliseconds update_interval)
-    : SensorBase(topic), m_update_interval(update_interval) {}
+    : SensorBase(topic, update_interval) {}
 
 float TemperatureSensor::generate_data() {
     return 20 + (std::rand() % 100) / 10.0f;

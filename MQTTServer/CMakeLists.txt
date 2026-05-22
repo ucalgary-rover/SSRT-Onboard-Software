@@ -23,6 +23,7 @@ set(SOURCES
   src/sensors/sensor_base.cpp
   src/sensors/temperature.cpp
   src/sensors/imu.cpp
+  src/sensors/gnss.cpp
 )
 
 set(SERIALLIB_SOURCE
