@@ -1,6 +1,6 @@
 #ifndef IMU_H
-#include <cstddef>
 #define IMU_H
+#include <cstddef>
 #if defined(_WIN32) || defined(_WIN64)
 // for serial ports above "COM9", we must use this extended syntax of "\\.\COMx".
 // also works for COM0 to COM9.
@@ -10,7 +10,6 @@
 #if defined(__linux__) || defined(__APPLE__)
 #define SERIAL_PORT \
     "/dev/serial/by-id/usb-STMicroelectronics_STM32_Virtual_ComPort_206D32785242-if00"
-using byte = std::byte;
 #endif
 #include "EasyObjectDictionary.h"
 #include "EasyProfile.h"
@@ -30,7 +29,6 @@ struct IMUData {
 };
 
 private:
-    std::chrono::milliseconds m_update_interval;
     float* m_rpy_out;
     EasyObjectDictionary eOD;
     EasyProfile eP;
@@ -44,21 +42,23 @@ public:
     explicit IMUSensor(const std::string& topic, float* m_rpy_out,
                        std::chrono::milliseconds update_interval = std::chrono::milliseconds(500));
     // single read/generate methods that can be called individually as needed
-    void read_RPY(float* array,
-                  byte* buffer);  // array is a 3 long array, 0 is roll 1 is pitch 2 is yaw.
-                                  // buffer is a large char* that will be written over
-    void read_MAG(float* array,
-                  byte* buffer);  // *array is a 3 long array, 0 is roll 1 is pitch 2
-                                  // is yaw, port is which port the IMU is connected to
+    // void read_RPY(float* array,
+    //               byte* buffer);  // array is a 3 long array, 0 is roll 1 is pitch 2 is yaw.
+    //                               // buffer is a large char* that will be written over
+    // void read_MAG(float* array,
+    //               byte* buffer);  // *array is a 3 long array, 0 is roll 1 is pitch 2
+    //                               // is yaw, port is which port the IMU is connected to
 
     void generate_data(IMUData& data);
 
     // methods to be used inside of the read functions
-    void RPY_request(float* array, serialib serial, byte* buffer);
+    void RPY_request(IMUData& data, serialib& serial);
 
-    void MAG_request(float* array, serialib serial, byte* buffer);
+    void MAG_request(IMUData& data, serialib& serial);
 
-    void parse_data(float* array, char* rxData, int rxSize);
+    void parse_data(IMUData& data, char* rxData, int rxSize);
+    
+    void read_Data(serialib& serial);
 };
 
 #endif
