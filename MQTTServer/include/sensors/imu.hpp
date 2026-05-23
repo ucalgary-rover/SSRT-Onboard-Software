@@ -18,15 +18,15 @@
 // TransducerM communication library instantiation:
 
 class IMUSensor : public SensorBase {
-struct IMUData {
-    float roll;
-    float pitch;
-    float yaw;
-    float battery_temp;
-    float power;
-    float heading_deg;
-    float speed;
-};
+    struct IMUData {
+        float roll;
+        float pitch;
+        float yaw;
+        float battery_temp;
+        float power;
+        float heading_deg;
+        float speed;
+    };
 
 private:
     float* m_rpy_out;
@@ -56,9 +56,9 @@ public:
 
     void MAG_request(IMUData& data, serialib& serial);
 
-    void parse_data(IMUData& data, char* rxData, int rxSize);
-    
-    void read_Data(serialib& serial);
+    void parse_data(IMUData& data, char* rxData, int rxSize, bool RPY);
+
+    void read_data(serialib& serial, IMUData& data);
 };
 
 #endif

@@ -1,10 +1,10 @@
 #include "sensors/imu.hpp"
 
-#include <filesystem>  // needed for runtime_error
 #include <cmath>
+#include <filesystem>  // needed for runtime_error
 IMUSensor::IMUSensor(const std::string& topic, float* m_rpy_out,
                      std::chrono::milliseconds update_interval)
-    : SensorBase(topic,update_interval),
+    : SensorBase(topic, update_interval),
       m_rpy_out(m_rpy_out),
       eOD(EasyObjectDictionary()),
       eP(&eOD) {}
@@ -48,9 +48,10 @@ void IMUSensor::generate_data(IMUData& data) {
 // I am keeping these in case the new function doesn't work
 
 void IMUSensor::parse_data(
-                           IMUData& data,  ///<[OUTPUT] Pointer to the data struct
-                           char* rxData,  ///< [INPUT] Pointer to the RX data array
-                           int rxSize     ///< [INPUT] Size of the RX data array
+    IMUData& data,  ///<[OUTPUT] Pointer to the data struct
+    char* rxData,   ///< [INPUT] Pointer to the RX data array
+    int rxSize,     ///< [INPUT] Size of the RX data array
+    bool RPY        ///<[INPUT] whether it is the magnet (false) or RPY (true) calling it
 ) {
     Ep_Header header;
     if (EP_SUCC_ ==
@@ -71,28 +72,22 @@ void IMUSensor::parse_data(
 
             case EP_CMD_RPY_: {
                 Ep_RPY ep_RPY;
+                // std::cout << "here for some reason";e
                 if (EP_SUCC_ ==
                     eOD.Read_Ep_RPY(
                         &ep_RPY)) {  // Another Example reading of the received Roll Pitch and Yaw
-                    float roll = ep_RPY.roll;
-                    float pitch = ep_RPY.pitch;
-                    float yaw = ep_RPY.yaw;
 
+                    if (RPY) {
+                        data.roll = ep_RPY.roll;
+                        data.pitch = ep_RPY.pitch;
+                    } else {
+                        data.heading_deg = ep_RPY.yaw;
+                    }
                     //					std::cout<<"roll"<<roll<<"\npitch"<<pitch<<"\nyaw"<<yaw;//use
                     // data as you wish
-                    data.roll = roll;
-                    data.pitch = pitch;
-                    data.yaw = yaw;
                 }
-            } break;
-            case EP_CMD_Q_S1_E_:{
-                Ep_Q_s1_e quaternion;
-                float q0 = quaternion.q[0];
-                float q1 = quaternion.q[1];
-                float q2 = quaternion.q[2];
-                float q3 = quaternion.q[3];
-                data.heading_deg = atan2(2*(q0*q3+q1*q2),1-2*(q2*q2+q3*q3)) * 180/M_PI;
-            }break;
+                break;
+            }
             default: {
                 std::cout << "wrong data";
                 break;
@@ -123,10 +118,10 @@ void IMUSensor::RPY_request(IMUData& data, serialib& serial) {
                                                       // structure (i.e. the payload) to be sent
             serial.writeBytes(txPkgData, txPkgSize);  // Step 5:  Send the package via Serial Port
         }
-    }    
+    }
     char buffer[255];
     serial.readBytes(buffer, 255, 200);
-    parse_data(data, buffer, 255);
+    parse_data(data, buffer, 255, true);
 }
 
 void IMUSensor::MAG_request(IMUData& data, serialib& serial) {
@@ -137,12 +132,12 @@ void IMUSensor::MAG_request(IMUData& data, serialib& serial) {
     if (EP_SUCC_ ==
         eOD.Write_Ep_Request(
             toId,
-            EP_CMD_Q_S1_E_)) {  // Step 2: Write the device ID into the data structure
+            EP_CMD_Raw_GYRO_ACC_MAG_)) {  // Step 2: Write the device ID into the data structure
                                           // (i.e. the request itself) pending to be sent
         EP_ID_TYPE_ txToId;
         char* txPkgData;
         int txPkgSize;
-        EP_CMD_TYPE_ txCmd = EP_CMD_Q_S1_E_;  // Step 3: Define what type of data we are
+        EP_CMD_TYPE_ txCmd = EP_CMD_Raw_GYRO_ACC_MAG_;  // Step 3: Define what type of data we are
                                                         // requesting for. (in this example, we are
                                                         // requesting Roll-Pitch-Yaw readings.
         if (EP_SUCC_ == eP.On_SendPkg(txCmd, &txToId, &txPkgData,
@@ -153,15 +148,14 @@ void IMUSensor::MAG_request(IMUData& data, serialib& serial) {
     }
     char buffer[255];
     serial.readBytes(buffer, 255, 200);
-    parse_data(data, buffer, 255);
+    parse_data(data, buffer, 255, false);
 }
 
-
-void IMUSensor::read_Data(serialib& serial){
-    IMUData data = {};
-    
+void IMUSensor::read_data(serialib& serial, IMUData& data) {
     IMUSensor::MAG_request(data, serial);
     IMUSensor::RPY_request(data, serial);
+
+    // std::cout << data.heading_deg << std::endl;
 }
 
 void IMUSensor::sensor_loop() {
@@ -172,36 +166,37 @@ void IMUSensor::sensor_loop() {
     if (errorOpening != 1) {
         std::cout << errorOpening;
     }
-    IMUSensor::generate_data(data);  // initialize with random data so we have something to publish before the first read
+    IMUSensor::generate_data(
+        data);  // initialize with random data so we have something to publish before the first read
 
     while (m_running) {
         // get data
-        // read_data(serial);
+        read_data(serial, data);
 
         // Generate random data for testing purposes
-        data.roll += random_value(5.0f, -5.0f);
-        if (data.roll > 360) {          // Roll back if we exceed 360
-            data.roll -= 360;
-        } else if (data.roll < 0) {     // Roll forward if we go below 0
-            data.roll += 360;
-        }
-        data.pitch += random_value(5.0f, -5.0f);
-        if (data.pitch > 180) {
-            data.pitch -= 360;
-        } else if (data.pitch < -180) {
-            data.pitch += 360;
-        }
-        data.yaw += random_value(5.0f, -5.0f);
-        if (data.yaw > 180) {
-            data.yaw -= 360;
-        } else if (data.yaw < -180) {
-            data.yaw += 360;
-        }
-        data.battery_temp += random_value(2.0f, -2.0f);
-        data.power += random_value(0.0f, -0.001f);
-        if (data.power < 0) {
-            data.power = 0;
-        }
+        // data.roll += random_value(5.0f, -5.0f);
+        // if (data.roll > 360) {          // Roll back if we exceed 360
+        //     data.roll -= 360;
+        // } else if (data.roll < 0) {     // Roll forward if we go below 0
+        //     data.roll += 360;
+        // }
+        // data.pitch += random_value(5.0f, -5.0f);
+        // if (data.pitch > 180) {
+        //     data.pitch -= 360;
+        // } else if (data.pitch < -180) {
+        //     data.pitch += 360;
+        // }
+        // data.yaw += random_value(5.0f, -5.0f);
+        // if (data.yaw > 180) {
+        //     data.yaw -= 360;
+        // } else if (data.yaw < -180) {
+        //     data.yaw += 360;
+        // }
+        // data.battery_temp += random_value(2.0f, -2.0f);
+        // data.power += random_value(0.0f, -0.001f);
+        // if (data.power < 0) {
+        //     data.power = 0;
+        // }
 
         // publish data
         if (m_callback) {

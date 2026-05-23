@@ -102,35 +102,27 @@ int main(int argc, char* argv[]) {
         float RPY[3];
         sensors.push_back(std::make_unique<IMUSensor>(env_values["IMU_TOPIC"], RPY,
                                                       std::chrono::milliseconds(100)));
-                                                              std::chrono::seconds(1)));
-                                                              sensors.push_back(
-                                                                  std::make_unique<GnssSensor>(
-                                                                      env_values["GNSS_TOPIC"],
-                                                                      std::chrono::milliseconds(
-                                                                          500)));
+        sensors.push_back(
+            std::make_unique<GnssSensor>(env_values["GNSS_TOPIC"], std::chrono::milliseconds(500)));
 
-                                                              // start all sensors
-                                                              for (auto& sensor : sensors) {
-                                                                  sensor->start(
-                                                                      publish_to_mqtt_callback);
-                                                              }
+        // start all sensors
+        for (auto& sensor : sensors) {
+            sensor->start(publish_to_mqtt_callback);
+        }
 
-                                                              // loop to keep main thread alive,
-                                                              // just waiting for shutdown signal
-                                                              while (!mqtt.should_shutdown()) {
-                                                                  std::this_thread::sleep_for(
-                                                                      std::chrono::milliseconds(
-                                                                          100));
-                                                              }
+        // loop to keep main thread alive,
+        // just waiting for shutdown signal
+        while (!mqtt.should_shutdown()) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
 
-                                                              // stop all sensors
-                                                              std::cout << "Stopping sensors"
-                                                                        << std::endl;
-                                                              for (auto& sensor : sensors) {
-                                                                  sensor->stop();
-                                                              }
+        // stop all sensors
+        std::cout << "Stopping sensors" << std::endl;
+        for (auto& sensor : sensors) {
+            sensor->stop();
+        }
 
-                                                              mqtt.disconnect();
+        mqtt.disconnect();
     } catch (const mqtt::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
         return 1;
