@@ -157,7 +157,7 @@ void IMUSensor::MAG_request(IMUData& data, serialib& serial) {
 }
 
 
-void IMUSensor::read_Data(&serialib serial){
+void IMUSensor::read_Data(serialib& serial){
     IMUData data = {};
     
     IMUSensor::MAG_request(data, serial);
