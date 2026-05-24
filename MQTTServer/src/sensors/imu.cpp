@@ -2,12 +2,8 @@
 
 #include <cmath>
 #include <filesystem>  // needed for runtime_error
-IMUSensor::IMUSensor(const std::string& topic, float* m_rpy_out,
-                     std::chrono::milliseconds update_interval)
-    : SensorBase(topic, update_interval),
-      m_rpy_out(m_rpy_out),
-      eOD(EasyObjectDictionary()),
-      eP(&eOD) {}
+IMUSensor::IMUSensor(const std::string& topic, std::chrono::milliseconds update_interval)
+    : SensorBase(topic, update_interval), eOD(EasyObjectDictionary()), eP(&eOD) {}
 
 float IMUSensor::random_value(float max, float min) {
     return (std::rand() / (float)RAND_MAX) * (max - min) + min;
@@ -197,7 +193,7 @@ void IMUSensor::read_data(serialib& serial, IMUData& data) {
 void IMUSensor::sensor_loop() {
     IMUData data = {};
     serialib serial;
-    char errorOpening = serial.openDevice(SERIAL_PORT, 115200);
+    char errorOpening = serial.openDevice(SERIAL_PORT, BAUD_RATE);
     // If connection fails, return the error code otherwise, display a success message
     if (errorOpening != 1) {
         std::cout << errorOpening;

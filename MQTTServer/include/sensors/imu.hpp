@@ -17,6 +17,8 @@
 #include "serialib.h"
 // TransducerM communication library instantiation:
 
+#define BAUD_RATE 115200
+
 class IMUSensor : public SensorBase {
     struct IMUData {
         float roll;
@@ -29,7 +31,6 @@ class IMUSensor : public SensorBase {
     };
 
 private:
-    float* m_rpy_out;
     EasyObjectDictionary eOD;
     EasyProfile eP;
 
@@ -39,7 +40,7 @@ protected:
     void sensor_loop() override;
 
 public:
-    explicit IMUSensor(const std::string& topic, float* m_rpy_out,
+    explicit IMUSensor(const std::string& topic,
                        std::chrono::milliseconds update_interval = std::chrono::milliseconds(500));
     // single read/generate methods that can be called individually as needed
     // void read_RPY(float* array,

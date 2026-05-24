@@ -44,26 +44,9 @@ Code to read from the sensors and publish that data to an MQTT server. All comma
 chmod +x install-paho.sh
 ```
 
-### Install IMU libaraies
+### IMU Dependencies
 
-1. Build EasyProfile
-```bash
-cd ..
-cd EasyProfile
-cmake --build build
-cmake -Bbuild .
-sudo cmake --install build
-cd ..
-```
-
-2. Build serialib-master
-```bash
-cd serialib-master
-cmake -Bbuild .
-cmake --build build
-sudo cmake --install build
-cd ..
-```
+IMU dependencies are contained within `MQTTServer/dependencies`. They will be automatically built via CMake
 
 ### Build
 

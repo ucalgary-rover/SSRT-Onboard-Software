@@ -99,9 +99,8 @@ int main(int argc, char* argv[]) {
 
         sensors.push_back(std::make_unique<TemperatureSensor>(env_values["TEMPERATURE_TOPIC"],
                                                               std::chrono::milliseconds(500)));
-        float RPY[3];
-        sensors.push_back(std::make_unique<IMUSensor>(env_values["IMU_TOPIC"], RPY,
-                                                      std::chrono::milliseconds(100)));
+        sensors.push_back(
+            std::make_unique<IMUSensor>(env_values["IMU_TOPIC"], std::chrono::milliseconds(100)));
         sensors.push_back(
             std::make_unique<GnssSensor>(env_values["GNSS_TOPIC"], std::chrono::milliseconds(500)));
 
