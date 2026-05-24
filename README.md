@@ -44,10 +44,9 @@ Code to read from the sensors and publish that data to an MQTT server. All comma
 chmod +x install-paho.sh
 ```
 
-2. Run `install-paho.sh`
-```bash
-./install-paho.sh
-```
+### IMU Dependencies
+
+IMU dependencies are contained within `MQTTServer/dependencies`. They will be automatically built via CMake
 
 ### Build
 

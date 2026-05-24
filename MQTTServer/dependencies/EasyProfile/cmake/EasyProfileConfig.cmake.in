@@ -1,0 +1,7 @@
+# Minimal package config for EasyProfile
+
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+include("${CMAKE_CURRENT_LIST_DIR}/EasyProfileTargets.cmake")

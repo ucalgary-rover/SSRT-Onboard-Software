@@ -14,6 +14,7 @@ find_library(PAHO_MQTT3A paho-mqtt3a REQUIRED)
 
 # build dependencies from source where possible
 add_subdirectory(dependencies/cpp-dotenv)
+add_subdirectory(dependencies/EasyProfile)
 
 set(SOURCES
   src/main.cpp
@@ -21,11 +22,19 @@ set(SOURCES
   src/utils.cpp
   src/sensors/sensor_base.cpp
   src/sensors/temperature.cpp
+  src/sensors/imu.cpp
   src/sensors/gnss.cpp
 )
 
+set(SERIALLIB_SOURCE
+  dependencies/seriallib/serialib.cpp
+)
+set(SERIALLIB_INCLUDE
+  ${CMAKE_SOURCE_DIR}/dependencies/seriallib
+)
+
 # Create the ssrt-onboard-software executable
-add_executable(ssrt-onboard-software ${SOURCES})
+add_executable(ssrt-onboard-software ${SOURCES} ${SERIALLIB_SOURCE})
 
 # Link libraries
 target_link_libraries(ssrt-onboard-software
@@ -33,10 +42,12 @@ target_link_libraries(ssrt-onboard-software
     paho-mqttpp3
     paho-mqtt3a
     cpp_dotenv
+    EasyProfile
 )
 
 target_include_directories(ssrt-onboard-software
   PRIVATE
     ${CMAKE_SOURCE_DIR}/include
+    ${SERIALLIB_INCLUDE}
     /usr/local/include
 )
