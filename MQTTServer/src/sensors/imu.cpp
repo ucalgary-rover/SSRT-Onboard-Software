@@ -13,12 +13,10 @@ float IMUSensor::random_value(float max, float min) {
     return (std::rand() / (float)RAND_MAX) * (max - min) + min;
 }
 
-// I probably broke a rule here, but I needed a way to initiate data before adding to it
-bool init = true;
-
 void IMUSensor::generate_data(IMUData& data) {
-    
-    if (init) {
+    static bool initialized = false;
+
+    if (!initialized) {
         data.roll = random_value(180.0f, -180.0f);
         data.yaw = random_value(180.0f, -180.0f);
         data.pitch = random_value(180.0f, -180.0f);
@@ -27,12 +25,12 @@ void IMUSensor::generate_data(IMUData& data) {
         data.heading_deg = 0;
         data.speed = 0;
 
-        init = false;
+        initialized = true;
     } else {
         data.roll += random_value(5.0f, -5.0f);
-        if (data.roll > 360) {          // Roll back if we exceed 360
+        if (data.roll > 360) {  // Roll back if we exceed 360
             data.roll -= 360;
-        } else if (data.roll < 0) {     // Roll forward if we go below 0
+        } else if (data.roll < 0) {  // Roll forward if we go below 0
             data.roll += 360;
         }
         data.pitch += random_value(5.0f, -5.0f);
@@ -51,6 +49,12 @@ void IMUSensor::generate_data(IMUData& data) {
         data.power += random_value(0.0f, -0.001f);
         if (data.power < 0) {
             data.power = 0;
+        }
+        data.heading_deg += random_value(5.0f, -5.0f);
+        if (data.heading_deg > 180) {
+            data.heading_deg -= 360;
+        } else if (data.heading_deg < -180) {
+            data.heading_deg += 360;
         }
     }
 }
@@ -203,10 +207,10 @@ void IMUSensor::sensor_loop() {
 
     while (m_running) {
         // get data
-        read_data(serial, data);
+        // read_data(serial, data);
 
         // Simulated data. Comment this line out to switch to real data
-        // IMUSensor::generate_data(data);  // add some random noise to the data so it changes over time
+        generate_data(data);  // add some random noise to the data so it changes over time
 
         // publish data
         if (m_callback) {
