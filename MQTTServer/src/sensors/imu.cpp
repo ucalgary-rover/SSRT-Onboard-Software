@@ -16,8 +16,6 @@ void IMUSensor::generate_data(IMUData& data) {
         data.roll = random_value(180.0f, -180.0f);
         data.yaw = random_value(180.0f, -180.0f);
         data.pitch = random_value(180.0f, -180.0f);
-        data.battery_temp = random_value(60.0f, 20.0f);
-        data.power = random_value(100.0f, 50.0f);
         data.heading_deg = 0;
         data.speed = 0;
 
@@ -40,11 +38,6 @@ void IMUSensor::generate_data(IMUData& data) {
             data.yaw -= 360;
         } else if (data.yaw < -180) {
             data.yaw += 360;
-        }
-        data.battery_temp += random_value(2.0f, -2.0f);
-        data.power += random_value(0.0f, -0.001f);
-        if (data.power < 0) {
-            data.power = 0;
         }
         data.heading_deg += random_value(5.0f, -5.0f);
         if (data.heading_deg > 180) {
