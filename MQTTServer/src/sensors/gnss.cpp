@@ -2,6 +2,7 @@
 
 #include <filesystem>  // needed for runtime_error
 
+
 #define STARTING_LAT 51.45404
 #define STARTING_LONG -112.67683
 
@@ -64,69 +65,52 @@ unsigned long CalculateBlockCRC32( unsigned long ulCount, unsigned char *ucBuffe
 
 void read_data(GnssData& data, unsigned char* buffer, serialib& serial){
 
-    serial.writeBytes(buffer, sizeof(buffer));
+    serial.writeBytes(buffer, 64);
 
-    // Read byte by byte, looking for AA 44 12 sync bytes to find
-    // the start of the binary response, then read the rest of the
-    // message based on the header's reported length
-    std::vector<unsigned char> response;
     unsigned char byte;
     bool synced = false;
     int syncCount = 0;
 
-    // Step 1: hunt for the AA 44 12 sync sequence
+    // Step 1: hunt for AA 44 12
     while (!synced) {
-        
-        if (byte == 0xAA) {
-            response.clear();
-            response.push_back(byte);
-            syncCount = 1;
-        } else if (syncCount == 1 && byte == 0x44) {
-            response.push_back(byte);
-            syncCount = 2;
-        } else if (syncCount == 2 && byte == 0x12) {
-            response.push_back(byte);
-            synced = true;
-        } else {
-            syncCount = 0;
-            response.clear();
-        }
-    }
-
-    // Step 2: read the rest of the header (25 more bytes, total header = 28)
-    for (int i = 0; i < 25; i++) {
         if (serial.readChar((char*)&byte, 2000) != 1) {
-            std::cout << "timeout reading header" << std::endl;
+            std::cout << "timeout waiting for sync" << std::endl;
+            return;
         }
-        response.push_back(byte);
+        if (byte == 0xAA)                        syncCount = 1;
+        else if (syncCount == 1 && byte == 0x44) syncCount = 2;
+        else if (syncCount == 2 && byte == 0x12) synced = true;
+        else                                     syncCount = 0;
     }
 
-    // Step 3: extract message body length from header bytes 8-9 (little-endian Ushort)
-    // offset 8 in the header = index 8 in response vector
-    uint16_t messageLength = response[8] | (response[9] << 8);
-
-    // Step 4: read the body + 4 CRC bytes
-    int remaining = messageLength + 4;
-    for (int i = 0; i < remaining; i++) {
+    // Step 2: skip 25 remaining header bytes + 8 body bytes = 33 bytes to reach latitude
+    for (int i = 0; i < 33; i++) {
         if (serial.readChar((char*)&byte, 2000) != 1) {
-            std::cout << "timeout reading body" << std::endl;
+            std::cout << "timeout skipping to lat" << std::endl;
+            return;
         }
-        response.push_back(byte);
     }
 
-    // Print the full captured response as hex
-    std::cout << "Response (" << std::dec << response.size() << " bytes):" << std::endl;
-    for (size_t i = 0; i < response.size(); i++) {
-        std::cout << std::hex << std::setw(2) << std::setfill('0') << (int)response[i] << " ";
-        if ((i + 1) % 16 == 0) std::cout << std::endl;
+    // Step 3: read latitude (8 bytes)
+    unsigned char latBytes[8];
+    for (int i = 0; i < 8; i++) {
+        if (serial.readChar((char*)&latBytes[i], 2000) != 1) {
+            std::cout << "timeout reading lat" << std::endl;
+            return;
+        }
     }
-    std::cout << std::endl;
-    double lat, lon;
-    memcpy(&lat, response.data() + 36, 8);
-    memcpy(&lon, response.data() + 44, 8);
 
-    data.latitude = lat;
-    data.longitude = lon;
+    // Step 4: read longitude (8 bytes, immediately after latitude)
+    unsigned char lonBytes[8];
+    for (int i = 0; i < 8; i++) {
+        if (serial.readChar((char*)&lonBytes[i], 2000) != 1) {
+            std::cout << "timeout reading lon" << std::endl;
+            return;
+        }
+    }
+
+    memcpy(&data.latitude,  latBytes, 8);
+    memcpy(&data.longitude, lonBytes, 8);
 }
 
 void GnssSensor::sensor_loop() {
@@ -139,7 +123,7 @@ void GnssSensor::sensor_loop() {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     };
-
+    
     unsigned long lastFour = CalculateBlockCRC32(60, buffer);
 
     buffer[60] = (lastFour >> 0 ) & 0xFF;
