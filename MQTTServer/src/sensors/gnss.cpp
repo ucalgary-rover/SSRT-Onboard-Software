@@ -1,4 +1,5 @@
 #include "sensors/gnss.hpp"
+#include "runtime_flags.hpp"
 
 #include <filesystem>  // needed for runtime_error
 
@@ -24,7 +25,11 @@ void GnssSensor::sensor_loop() {
 
     while (m_running) {
         // get data
-        generate_data(data);
+        if(g_debug_mode.load()) {
+            generate_data(data);
+        } else {
+            read_data(data);
+        }
 
         if (m_callback) {
             m_callback(m_topic, &data, sizeof(data));
