@@ -223,5 +223,8 @@ void IMUSensor::sensor_loop() {
         // wait for more data
         std::this_thread::sleep_for(m_update_interval);
     }
-    serial.closeDevice();
+    if(!g_debug_mode.load()) {
+        serial.closeDevice();
+    }
+    
 }
