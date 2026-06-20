@@ -1,8 +1,7 @@
 #include "sensors/gnss.hpp"
 
-#include <chrono>
 #include <filesystem>  // needed for runtime_error
-#include <thread>
+#include <string>
 
 #define STARTING_LAT 51.45404
 #define STARTING_LONG -112.67683
@@ -59,101 +58,55 @@ void GnssSensor::read_data(GnssData& data, unsigned char* buffer, serialib& seri
     // serial.writeBytes(buffer, 64);
     const char* cmd = "LOG THISPORT BESTPOS ONCE\r\n";
     serial.writeBytes((unsigned char*)cmd, strlen(cmd));
-    // std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    std::string reads[] = {
+        "",//(0) header part 1
+        "",//(1) header part 2
+        "",//(2) header part 3
+        "",//(3) port read from
+        "",//(4) sequence number
+        "",//(5) reciever idle time %
+        "",//(6) time status
+        "",//(7) week number
+        "",//(8) seconds into week
+        "",//(9) reciever status (hex)
+        "",//(10) checksum
+        "",//(11) reciever software version
+        "",//(12) solution status
+        "",//(13) solution type
+        "",//(14) latitude in degrees
+        "",//(15) longitude in degree
+        "",//(16) height above ellipsoide in meters
+        "",//(17) undulation in meters
+        "",//(18) datum
+        "",//(19) latitude standard deviation in meters
+        "",//(20) longitude standard deviation in meters
+        "",//(21) height standard deviation in meters
+        "",//(22) base station id
+        "",//(23) differential age in seconds
+        "",//(24) solution age in seconds
+        "",//(25) number of satalites tracked
+        "",//(26) number of satalites used in solution
+        "",//(27) number of satalites above elevation mask
+        "",//(28) number of satalites above mask with L1
+        "",//(29) reserved
+        "",//(30) extended solution status
+        "",//(31) Galileo/BeiDou signal mask
+        "",//(32) GPS/GLONASS signal mask
+    };
     unsigned char byte;
-    bool synced = false;
-    int syncCount = 0;
-    char lat[15] = {0};
-    char lon[18] = {0};
-    for (int i = 0; i < 110; i++) {
-        if (serial.readChar((char*)&byte, 2000) != 1) {
-            std::cout << "timeout skipping after long" << std::endl;
-            return;
+    int stringSelector = 0;
+    while(serial.readChar((char*)&byte, 2000) == 1){
+        if(byte == ' '){
+            stringSelector += 1;
+        }else{
+            reads[stringSelector] += byte;
         }
-        // std::cout << byte;
     }
-
-    for (int i = 0; i < 14; i++) {
-        if (serial.readChar((char*)&byte, 2000) != 1) {
-            std::cout << "timeout skipping after long" << std::endl;
-            return;
-        }
-        lat[i] = byte;
-    }
-
-    if (serial.readChar((char*)&byte, 2000) != 1) {
-        std::cout << "timeout skipping after long" << std::endl;
-        return;
-    }
-
-    for (int i = 0; i < 16; i++) {
-        if (serial.readChar((char*)&byte, 2000) != 1) {
-            std::cout << "timeout skipping after long" << std::endl;
-            return;
-        }
-        lon[i] = byte;
-    }
-
-    for (int i = 0; i < 93; i++) {
-        if (serial.readChar((char*)&byte, 2000) != 1) {
-            std::cout << "timeout skipping after long" << std::endl;
-            return;
-        }
-        // std::cout << byte;
-    }
-    // std::cout << std::endl;
-    // // Step 1: hunt for AA 44 12
-    // while (!synced) {
-    //     if (serial.readChar((char*)&byte, 2000) != 1) {
-    //         std::cout << "timeout waiting for sync" << std::endl;
-    //         return;
-    //     }
-    //     if (byte == 0xAA)
-    //         syncCount = 1;
-    //     else if (syncCount == 1 && byte == 0x44)
-    //         syncCount = 2;
-    //     else if (syncCount == 2 && byte == 0x12)
-    //         synced = true;
-    //     else
-    //         syncCount = 0;
-    // }
-
-    // // Step 2: skip 25 remaining header bytes + 8 body bytes = 33 bytes to reach latitude
-    // for (int i = 0; i < 33; i++) {
-    //     if (serial.readChar((char*)&byte, 2000) != 1) {
-    //         std::cout << "timeout skipping to lat" << std::endl;
-    //         return;
-    //     }
-    // }
-
-    // // Step 3: read latitude (8 bytes)
-    // unsigned char latBytes[8];
-    // for (int i = 0; i < 8; i++) {
-    //     if (serial.readChar((char*)&latBytes[i], 2000) != 1) {
-    //         std::cout << "timeout reading lat" << std::endl;
-    //         return;
-    //     }
-    // }
-
-    // // Step 4: read longitude (8 bytes, immediately after latitude)
-    // unsigned char lonBytes[8];
-    // for (int i = 0; i < 8; i++) {
-    //     if (serial.readChar((char*)&lonBytes[i], 2000) != 1) {
-    //         std::cout << "timeout reading lon" << std::endl;
-    //         return;
-    //     }
-    // }
-
-    // memcpy(&data.latitude, latBytes, 8);
-    // memcpy(&data.longitude, lonBytes, 8);
-
-    // for (int i = 0; i < 60; i++) {
-    //     if (serial.readChar((char*)&byte, 2000) != 1) {
-    //         std::cout << "timeout skipping after long" << std::endl;
-    //         return;
-    //     }
-    // }
-    std::cout << lat << ", " << lon << std::endl;
+    double lat = std::stod(reads[14]);
+    double lon = std::stod(reads[15]);
+    std::cout << lat <<", "<< lon << std::endl;
+    data.latitude = lat;
+    data.longitude = lon;
 }
 
 void GnssSensor::sensor_loop() {
