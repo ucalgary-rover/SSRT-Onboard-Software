@@ -1,8 +1,8 @@
 #include "sensors/gnss.hpp"
 
 #include <filesystem>  // needed for runtime_error
-#include <string>
 #include <regex>
+#include <string>
 
 #define STARTING_LAT 51.45404
 #define STARTING_LONG -112.67683
@@ -62,20 +62,21 @@ void GnssSensor::read_data(GnssData& data, unsigned char* buffer, serialib& seri
     std::string full = "";
     unsigned char byte;
     int stringSelector = 0;
-    while(serial.readChar((char*)&byte, 2000) == 1){
+    while (serial.readChar((char*)&byte, 20) == 1) {
         full += byte;
     }
-    std::regex latLonRegex("-?[\\d]{2,3}[.]{1}[\\d]{5,}");
+    std::regex latLonRegex(R"((-?\d{2,3}\.\d{5,})\s+(-?\d{2,3}\.\d{5,}))");
     std::smatch latLong;
-    std::regex_match(full,latLong,latLonRegex);
-    for(int i = 0; i<latLong.size(); i++){
-        std::cout << latLong[i]<<std::endl;
+    if (std::regex_search(full, latLong, latLonRegex)) {
+        double lat = std::stod(latLong[1]);
+        double lon = std::stod(latLong[2]);
+
+        std::cout << std::fixed << std::setprecision(16);
+        std::cout << lat << ", " << lon << '\n';
+
+        data.latitude = lat;
+        data.longitude = lon;
     }
-    double lat = std::stod(latLong[0]);
-    double lon = std::stod(latLong[1]);
-    std::cout << lat <<", "<< lon << std::endl;
-    data.latitude = lat;
-    data.longitude = lon;
 }
 
 void GnssSensor::sensor_loop() {
