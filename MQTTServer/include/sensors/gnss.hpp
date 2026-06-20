@@ -1,6 +1,5 @@
 #ifndef GNSS_H
 #define GNSS_H
-
 #define CRC32_POLYNOMIAL 0xEDB88320L
 
 #include "sensors/sensor_base.hpp"

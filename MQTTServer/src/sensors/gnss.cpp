@@ -2,6 +2,7 @@
 
 #include <filesystem>  // needed for runtime_error
 #include <string>
+#include <regex>
 
 #define STARTING_LAT 51.45404
 #define STARTING_LONG -112.67683
@@ -58,52 +59,20 @@ void GnssSensor::read_data(GnssData& data, unsigned char* buffer, serialib& seri
     // serial.writeBytes(buffer, 64);
     const char* cmd = "LOG THISPORT BESTPOS ONCE\r\n";
     serial.writeBytes((unsigned char*)cmd, strlen(cmd));
-    std::string reads[] = {
-        "",//(0) header part 1
-        "",//(1) header part 2
-        "",//(2) header part 3
-        "",//(3) port read from
-        "",//(4) sequence number
-        "",//(5) reciever idle time %
-        "",//(6) time status
-        "",//(7) week number
-        "",//(8) seconds into week
-        "",//(9) reciever status (hex)
-        "",//(10) checksum
-        "",//(11) reciever software version
-        "",//(12) solution status
-        "",//(13) solution type
-        "",//(14) latitude in degrees
-        "",//(15) longitude in degree
-        "",//(16) height above ellipsoide in meters
-        "",//(17) undulation in meters
-        "",//(18) datum
-        "",//(19) latitude standard deviation in meters
-        "",//(20) longitude standard deviation in meters
-        "",//(21) height standard deviation in meters
-        "",//(22) base station id
-        "",//(23) differential age in seconds
-        "",//(24) solution age in seconds
-        "",//(25) number of satalites tracked
-        "",//(26) number of satalites used in solution
-        "",//(27) number of satalites above elevation mask
-        "",//(28) number of satalites above mask with L1
-        "",//(29) reserved
-        "",//(30) extended solution status
-        "",//(31) Galileo/BeiDou signal mask
-        "",//(32) GPS/GLONASS signal mask
-    };
+    std::string full = "";
     unsigned char byte;
     int stringSelector = 0;
     while(serial.readChar((char*)&byte, 2000) == 1){
-        if(byte == ' '){
-            stringSelector += 1;
-        }else{
-            reads[stringSelector] += byte;
-        }
+        full += byte;
     }
-    double lat = std::stod(reads[14]);
-    double lon = std::stod(reads[15]);
+    std::regex latLonRegex("-?[\\d]{2,3}[.]{1}[\\d]{5,}");
+    std::smatch latLong;
+    std::regex_match(full,latLong,latLonRegex);
+    for(int i = 0; i<latLong.size(); i++){
+        std::cout << latLong[i]<<std::endl;
+    }
+    double lat = std::stod(latLong[0]);
+    double lon = std::stod(latLong[1]);
     std::cout << lat <<", "<< lon << std::endl;
     data.latitude = lat;
     data.longitude = lon;
