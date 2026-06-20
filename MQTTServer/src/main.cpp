@@ -55,6 +55,7 @@ void handle_cmd_line_args(int argc, char* argv[], const char*& env_file_path, bo
                           << "Options:\n"
                           << "  -e, --env-file-path <path>  Path to the environment file (default: "
                           << DEFAULT_ENV_FILE_PATH << ")\n"
+                          << "  -d, --debug                 Use simulated data\n"
                           << "  -h, --help                  Show this help message\n";
                 exit(0);
             case '?':
