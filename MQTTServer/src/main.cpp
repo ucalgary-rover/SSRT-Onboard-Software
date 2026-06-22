@@ -22,6 +22,7 @@
 MQTTClient* global_mqtt_client = nullptr;
 // make sure only one thread is writing at a time
 std::mutex cout_mutex;
+std::atomic<bool> g_debug_mode{false};
 
 void signal_handler(int signum) {
     std::cout << "\nShutdown signal received" << std::endl;
@@ -30,25 +31,31 @@ void signal_handler(int signum) {
     }
 }
 
-void handle_cmd_line_args(int argc, char* argv[], const char*& env_file_path) {
+void handle_cmd_line_args(int argc, char* argv[], const char*& env_file_path, bool& debug_mode) {
     static struct option long_options[] = {
         {"env-file-path", required_argument, nullptr, 'e'},
+        {"debug", no_argument, nullptr, 'd'},
         {"help", no_argument, nullptr, 'h'},
         {nullptr, 0, nullptr, 0},
     };
 
     int opt;
-    while ((opt = getopt_long(argc, argv, "e:h", long_options, nullptr)) != -1) {
+    while ((opt = getopt_long(argc, argv, "e:dh", long_options, nullptr)) != -1) {
         switch (opt) {
             case 'e':
                 std::cout << "HERE!!" << std::endl;
                 env_file_path = optarg;
+                break;
+            case 'd':
+                debug_mode = true;
+                std::cout << "Debug mode enabled\n";
                 break;
             case 'h':
                 std::cout << "Usage: " << argv[0] << " [OPTIONS]\n\n"
                           << "Options:\n"
                           << "  -e, --env-file-path <path>  Path to the environment file (default: "
                           << DEFAULT_ENV_FILE_PATH << ")\n"
+                          << "  -d, --debug                 Use simulated data\n"
                           << "  -h, --help                  Show this help message\n";
                 exit(0);
             case '?':
@@ -65,7 +72,9 @@ int main(int argc, char* argv[]) {
 
     // handle command line arguments
     const char* env_file_path = DEFAULT_ENV_FILE_PATH;
-    handle_cmd_line_args(argc, argv, env_file_path);
+    bool debug_mode = false;
+    handle_cmd_line_args(argc, argv, env_file_path, debug_mode);
+    g_debug_mode.store(debug_mode);
     std::cout << "Finished command line stuff. " << env_file_path << std::endl;
 
     // load environment variables

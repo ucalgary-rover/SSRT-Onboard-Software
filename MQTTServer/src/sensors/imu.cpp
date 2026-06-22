@@ -1,4 +1,5 @@
 #include "sensors/imu.hpp"
+#include "runtime_flags.hpp"
 
 #include <cmath>
 #include <filesystem>  // needed for runtime_error
@@ -193,20 +194,26 @@ void IMUSensor::read_data(serialib& serial, IMUData& data) {
 void IMUSensor::sensor_loop() {
     IMUData data = {};
     serialib serial;
-    char errorOpening = serial.openDevice(SERIAL_PORT, BAUD_RATE);
-    // If connection fails, return the error code otherwise, display a success message
-    if (errorOpening != 1) {
-        std::cout << errorOpening;
+    if(!g_debug_mode.load()) {
+        char errorOpening = serial.openDevice(SERIAL_PORT, BAUD_RATE);
+        // If connection fails, return the error code otherwise, display a success message
+        if (errorOpening != 1) {
+            std::cout << errorOpening;
+        }
     }
+    
     IMUSensor::generate_data(
         data);  // initialize with random data so we have something to publish before the first read
 
     while (m_running) {
         // get data
-        // read_data(serial, data);
 
-        // Simulated data. Comment this line out to switch to real data
-        generate_data(data);  // add some random noise to the data so it changes over time
+        if(g_debug_mode.load()) {
+            // Simulated data.
+            generate_data(data);  // add some random noise to the data so it changes over time
+        } else {
+            read_data(serial, data);
+        } 
 
         // publish data
         if (m_callback) {
@@ -216,5 +223,8 @@ void IMUSensor::sensor_loop() {
         // wait for more data
         std::this_thread::sleep_for(m_update_interval);
     }
-    serial.closeDevice();
+    if(!g_debug_mode.load()) {
+        serial.closeDevice();
+    }
+    
 }
