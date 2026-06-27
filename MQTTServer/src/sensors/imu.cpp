@@ -196,7 +196,7 @@ void IMUSensor::sensor_loop() {
     char errorOpening = serial.openDevice(SERIAL_PORT, BAUD_RATE);
     // If connection fails, return the error code otherwise, display a success message
     if (errorOpening != 1) {
-        std::cout << errorOpening;
+        std::cout << "IMU not connected";
     }
     IMUSensor::generate_data(
         data);  // initialize with random data so we have something to publish before the first read
