@@ -29,8 +29,8 @@ std::optional<std::filesystem::path> find_default_env_path() {
     namespace fs = std::filesystem;
     constexpr std::array<const char*, 2> filenames = {"config.env", ".env"};
     const std::array<fs::path, 2> directories = {fs::current_path(), fs::current_path().parent_path()};
-    for(const fs::path& dir : directories) {
-        for(const char* filename : filenames) {
+    for(const auto& dir : directories) {
+        for(const auto* filename : filenames) {
             fs::path current = dir / filename;
             if(fs::exists(current) && fs::is_regular_file(current)) {
                 return current;
@@ -46,7 +46,7 @@ void signal_handler(int signum) {
     }
 }
 
-void handle_cmd_line_args(int argc, char* argv[], const char*& env_file_path, bool& debug_mode) {
+void handle_cmd_line_args(int argc, char* argv[], std::string& env_file_path, bool& debug_mode) {
     static struct option long_options[] = {
         {"env-file-path", required_argument, nullptr, 'e'},
         {"debug", no_argument, nullptr, 'd'},
@@ -86,9 +86,16 @@ int main(int argc, char* argv[]) {
     signal(SIGTERM, signal_handler);  // termination request
 
     // handle command line arguments
-    const char* env_file_path = DEFAULT_ENV_FILE_PATH;
+    std::string env_file_path;
     bool debug_mode = false;
     handle_cmd_line_args(argc, argv, env_file_path, debug_mode);
+    if(env_file_path.empty()) {
+        auto found = find_default_env_path();
+        if(!found) {
+            throw std::runtime_error(".env file not found in current or parent directory");
+        }
+        env_file_path = found->string();
+    }
     g_debug_mode.store(debug_mode);
     std::cout << "Finished command line stuff. " << env_file_path << std::endl;
 
