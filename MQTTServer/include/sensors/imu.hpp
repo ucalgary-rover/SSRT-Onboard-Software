@@ -26,6 +26,9 @@ struct IMUData {
     float power;
     float heading_deg;
     float speed;
+    float acc_x;
+    float acc_y;
+    float acc_z;
 };
 
 private:
@@ -59,6 +62,9 @@ public:
     void parse_data(IMUData& data, char* rxData, int rxSize);
     
     void read_Data(serialib& serial);
+    
+    void ACC_request(IMUData& data, serialib& serial);
+
 };
 
 #endif

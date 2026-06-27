@@ -62,10 +62,6 @@ void IMUSensor::parse_data(
                                    // only return EP_SUCC_ when a complete and correct package has
                                    // arrived. Example Reading of the Short ID of the device who
                                    // sends the data:
-        uint32 fromId =
-            header.fromId;  // Step 3.1: Now we are able to read the received payload data
-
-        // header.fromId tells us from which TransducerM the data comes.
         switch (
             header.cmd) {  // Step 3.2: header.cmd tells what kind of data is inside the payload.
 
@@ -92,6 +88,14 @@ void IMUSensor::parse_data(
                 float q2 = quaternion.q[2];
                 float q3 = quaternion.q[3];
                 data.heading_deg = atan2(2*(q0*q3+q1*q2),1-2*(q2*q2+q3*q3)) * 180/M_PI;
+            }case EP_CMD_Raw_GYRO_ACC_MAG_: {
+                Ep_Raw_GyroAccMag ep_raw;
+                if (EP_SUCC_ == eOD.Read_Ep_Raw_GyroAccMag(&ep_raw)) {
+                    data.acc_x = ep_raw.acc[0] * 9.81;
+                    data.acc_y = ep_raw.acc[1] * 9.81;
+                    data.acc_z = ep_raw.acc[2] * 9.81;
+                    std::cout <<"testing accelerometer\nx:"<<data.acc_x<<"\ny:"<<data.acc_y<<"\nz:"<<data.acc_z;
+                }
             }break;
             default: {
                 std::cout << "wrong data";
@@ -156,12 +160,30 @@ void IMUSensor::MAG_request(IMUData& data, serialib& serial) {
     parse_data(data, buffer, 255);
 }
 
+void IMUSensor::ACC_request(IMUData& data, serialib& serial) {
+    uint16 toId = EP_ID_BROADCAST_;
+    if (EP_SUCC_ ==
+        eOD.Write_Ep_Request(toId, EP_CMD_Raw_GYRO_ACC_MAG_)) {
+        EP_ID_TYPE_ txToId;
+        char* txPkgData;
+        int txPkgSize;
+        EP_CMD_TYPE_ txCmd = EP_CMD_Raw_GYRO_ACC_MAG_;
+        if (EP_SUCC_ == eP.On_SendPkg(txCmd, &txToId, &txPkgData,
+                                      &txPkgSize)) {
+            serial.writeBytes(txPkgData, txPkgSize);
+        }
+    }
+    char buffer[255];
+    serial.readBytes(buffer, 255, 200);
+    parse_data(data, buffer, 255);
+}
 
 void IMUSensor::read_Data(serialib& serial){
     IMUData data = {};
     
     IMUSensor::MAG_request(data, serial);
     IMUSensor::RPY_request(data, serial);
+    IMUSensor::ACC_request(data, serial);
 }
 
 void IMUSensor::sensor_loop() {
