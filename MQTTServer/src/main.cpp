@@ -8,6 +8,7 @@
 #include <iostream>
 #include <thread>
 #include <vector>
+#include <optional>
 
 #include "dotenv.h"
 #include "mqtt_client.hpp"
@@ -24,6 +25,20 @@ MQTTClient* global_mqtt_client = nullptr;
 std::mutex cout_mutex;
 std::atomic<bool> g_debug_mode{false};
 
+std::optional<std::filesystem::path> find_default_env_path() {
+    namespace fs = std::filesystem;
+    constexpr std::array<const char*, 2> filenames = {"config.env", ".env"};
+    const std::array<fs::path, 2> directories = {fs::current_path(), fs::current_path().parent_path()};
+    for(const fs::path& dir : directories) {
+        for(const char* filename : filenames) {
+            fs::path current = dir / filename;
+            if(fs::exists(current) && fs::is_regular_file(current)) {
+                return current;
+            }
+        }
+    }
+    return std::nullopt;
+}
 void signal_handler(int signum) {
     std::cout << "\nShutdown signal received" << std::endl;
     if (global_mqtt_client) {
