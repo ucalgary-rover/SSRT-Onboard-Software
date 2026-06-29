@@ -17,8 +17,6 @@
 #include "sensors/sensor_base.hpp"
 #include "sensors/temperature.hpp"
 
-#define DEFAULT_ENV_FILE_PATH "config.env"
-
 // used for sending disconnect request in signal handler
 MQTTClient* global_mqtt_client = nullptr;
 // make sure only one thread is writing at a time
@@ -33,8 +31,9 @@ std::optional<std::filesystem::path> find_default_env_path() {
             continue;
         }
         for (const auto& current : fs::directory_iterator(directory)) {
-            if (!current.is_regular_file())
+            if (!current.is_regular_file()) {
                 continue;
+            }
             const auto& path = current.path();
             // checks the current directory and one level up for any .env file
             if (path.extension() == ".env") {
@@ -74,8 +73,7 @@ void handle_cmd_line_args(int argc, char* argv[], std::string& env_file_path, bo
             case 'h':
                 std::cout << "Usage: " << argv[0] << " [OPTIONS]\n\n"
                           << "Options:\n"
-                          << "  -e, --env-file-path <path>  Path to the environment file (default: "
-                          << DEFAULT_ENV_FILE_PATH << ")\n"
+                          << "  -e, --env-file-path <path>  Path to the environment file (default: any .env file found in the current or parent directory)\n"
                           << "  -d, --debug                 Use simulated data\n"
                           << "  -h, --help                  Show this help message\n";
                 exit(0);
@@ -104,7 +102,7 @@ int main(int argc, char* argv[]) {
         env_file_path = found->string();
     }
     g_debug_mode.store(debug_mode);
-    std::cout << "Finished command line stuff. " << env_file_path << std::endl;
+    std::cout << "Finished command line stuff. Using env file: " << env_file_path << std::endl;
 
     // load environment variables
     // TODO: error handling if this file is not found
