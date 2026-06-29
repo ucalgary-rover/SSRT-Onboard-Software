@@ -93,8 +93,8 @@ int main(int argc, char* argv[]) {
     std::string env_file_path;
     bool debug_mode = false;
     handle_cmd_line_args(argc, argv, env_file_path, debug_mode);
-    // if no argument is provided for env file, look for one to use
-    if(env_file_path.empty()) {
+    // if no argument is provided for env file or the file is not found, look for one to use
+    if(env_file_path.empty() || !std::filesystem::exists(env_file_path)) {
         auto found = find_default_env_path();
         if(!found) {
             throw std::runtime_error(".env file not found in current or parent directory");
@@ -105,10 +105,6 @@ int main(int argc, char* argv[]) {
     std::cout << "Finished command line stuff. Using env file: " << env_file_path << std::endl;
 
     // load environment variables
-    // TODO: error handling if this file is not found
-    if (!std::filesystem::exists(env_file_path)) {
-        throw std::runtime_error("config.env file not found");
-    }
     auto& env_values = dotenv::env.load_dotenv(env_file_path);
 
     try {
