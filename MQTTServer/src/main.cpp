@@ -27,18 +27,24 @@ std::atomic<bool> g_debug_mode{false};
 
 std::optional<std::filesystem::path> find_default_env_path() {
     namespace fs = std::filesystem;
-    constexpr std::array<const char*, 2> filenames = {"config.env", ".env"};
     const std::array<fs::path, 2> directories = {fs::current_path(), fs::current_path().parent_path()};
-    for(const auto& dir : directories) {
-        for(const auto* filename : filenames) {
-            fs::path current = dir / filename;
-            if(fs::exists(current) && fs::is_regular_file(current)) {
-                return current;
+    for (const auto& directory : directories) { 
+        if (!fs::exists(directory) || !fs::is_directory(directory)) {
+            continue;
+        }
+        for (const auto& current : fs::directory_iterator(directory)) {
+            if (!current.is_regular_file())
+                continue;
+            const auto& path = current.path();
+            // checks the current directory and one level up for any .env file
+            if (path.extension() == ".env") {
+                return path;
             }
         }
     }
     return std::nullopt;
 }
+
 void signal_handler(int signum) {
     std::cout << "\nShutdown signal received" << std::endl;
     if (global_mqtt_client) {
@@ -89,6 +95,7 @@ int main(int argc, char* argv[]) {
     std::string env_file_path;
     bool debug_mode = false;
     handle_cmd_line_args(argc, argv, env_file_path, debug_mode);
+    // if no argument is provided for env file, look for one to use
     if(env_file_path.empty()) {
         auto found = find_default_env_path();
         if(!found) {
