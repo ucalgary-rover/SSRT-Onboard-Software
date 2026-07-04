@@ -72,8 +72,7 @@ make
 
 5. Run the code
 ```bash
-cd ..
-./mqtt-server
+./ssrt-onboard-software
 ```
 
 ### Contributing
