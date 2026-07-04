@@ -203,10 +203,10 @@ void IMUSensor::sensor_loop() {
 
     while (m_running) {
         // get data
-        // read_data(serial, data);
+        read_data(serial, data);
 
         // Simulated data. Comment this line out to switch to real data
-        generate_data(data);  // add some random noise to the data so it changes over time
+        // generate_data(data);  // add some random noise to the data so it changes over time
 
         // publish data
         if (m_callback) {
