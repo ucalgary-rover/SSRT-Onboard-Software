@@ -106,9 +106,11 @@ void GnssSensor::sensor_loop() {
     GnssData data = {.latitude = STARTING_LAT, .longitude = STARTING_LONG};
 
     while (m_running) {
-        // get data
-        read_data(data, buffer, serial);
-        // generate_data(data);
+        if(g_debug_mode.load()) {
+	    generate_data(data);
+	} else {
+    	    read_data(data, buffer, serial);
+	}
 
         if (m_callback) {
             m_callback(m_topic, &data, sizeof(data));
