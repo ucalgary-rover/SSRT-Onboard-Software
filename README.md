@@ -30,7 +30,7 @@ Code for the camera feed servers. Uses a Python Flask server to stream data from
 ### Install
 Navigate to the `CameraFeed` directory. Run the following
 ```
-./insall.sh
+./install.sh
 ```
 
 Wait for the install to complete, then follow the instructions from the install script.
@@ -72,8 +72,7 @@ make
 
 5. Run the code
 ```bash
-cd ..
-./mqtt-server
+./ssrt-onboard-software
 ```
 
 ### Contributing

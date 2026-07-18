@@ -1,4 +1,5 @@
 #include "sensors/imu.hpp"
+#include "runtime_flags.hpp"
 
 #include <cmath>
 #include <filesystem>  // needed for runtime_error
@@ -16,8 +17,6 @@ void IMUSensor::generate_data(IMUData& data) {
         data.roll = random_value(180.0f, -180.0f);
         data.yaw = random_value(180.0f, -180.0f);
         data.pitch = random_value(180.0f, -180.0f);
-        data.battery_temp = random_value(60.0f, 20.0f);
-        data.power = random_value(100.0f, 50.0f);
         data.heading_deg = 0;
         data.speed = 0;
 
@@ -40,11 +39,6 @@ void IMUSensor::generate_data(IMUData& data) {
             data.yaw -= 360;
         } else if (data.yaw < -180) {
             data.yaw += 360;
-        }
-        data.battery_temp += random_value(2.0f, -2.0f);
-        data.power += random_value(0.0f, -0.001f);
-        if (data.power < 0) {
-            data.power = 0;
         }
         data.heading_deg += random_value(5.0f, -5.0f);
         if (data.heading_deg > 180) {
@@ -193,20 +187,26 @@ void IMUSensor::read_data(serialib& serial, IMUData& data) {
 void IMUSensor::sensor_loop() {
     IMUData data = {};
     serialib serial;
-    char errorOpening = serial.openDevice(SERIAL_PORT, BAUD_RATE);
-    // If connection fails, return the error code otherwise, display a success message
-    if (errorOpening != 1) {
-        std::cout << "IMU not connected";
+    if(!g_debug_mode.load()) {
+        char errorOpening = serial.openDevice(SERIAL_PORT, BAUD_RATE);
+        // If connection fails, return the error code otherwise, display a success message
+        if (errorOpening != 1) {
+            std::cout << errorOpening;
+        }
     }
+    
     IMUSensor::generate_data(
         data);  // initialize with random data so we have something to publish before the first read
 
     while (m_running) {
         // get data
-        read_data(serial, data);
 
-        // Simulated data. Comment this line out to switch to real data
-        // generate_data(data);  // add some random noise to the data so it changes over time
+        if(g_debug_mode.load()) {
+            // Simulated data.
+            generate_data(data);  // add some random noise to the data so it changes over time
+        } else {
+            read_data(serial, data);
+        } 
 
         // publish data
         if (m_callback) {
@@ -216,5 +216,8 @@ void IMUSensor::sensor_loop() {
         // wait for more data
         std::this_thread::sleep_for(m_update_interval);
     }
-    serial.closeDevice();
+    if(!g_debug_mode.load()) {
+        serial.closeDevice();
+    }
+    
 }

@@ -24,8 +24,6 @@ class IMUSensor : public SensorBase {
         float roll;
         float pitch;
         float yaw;
-        float battery_temp;
-        float power;
         float heading_deg;
         float speed;
     };
