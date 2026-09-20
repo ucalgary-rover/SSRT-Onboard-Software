@@ -5,8 +5,8 @@
 #include <regex>
 #include <string>
 
-#define STARTING_LAT 51.45404
-#define STARTING_LONG -112.67683
+#define STARTING_LAT 51.08073
+#define STARTING_LONG -114.13248
 
 GnssSensor::GnssSensor(const std::string& topic, const std::chrono::milliseconds& update_interval)
     : SensorBase(topic, update_interval) {
@@ -111,7 +111,7 @@ void GnssSensor::sensor_loop() {
         if(g_debug_mode.load()) {
             generate_data(data);
         } else {
-            read_data(data);
+            read_data(data, buffer, serial);
         }
 
         if (m_callback) {
